@@ -13,3 +13,30 @@ export const searchArtists = async (token: string, key: string) => {
 
   return data.artists.items
 }
+
+export const searchAlbums = async (token: string, key: string) => {
+  const {data} = await axios.get("https://api.spotify.com/v1/search", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      q: key,
+      type: "album"
+    }
+  })
+
+  return data.albums.items
+}
+
+export const getAlbum = async (token: string, id: string) => {
+  const {data} = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      id: id
+    }
+  })
+  console.log(data)
+  return data
+}

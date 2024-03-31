@@ -14,14 +14,20 @@ const App: React.FC = () => {
 
   const initToken = () => {
     const h = window.location.hash
-    let t = window.localStorage.getItem("token")
+    const t = window.localStorage.getItem("token")
     const s = h.substring(1).split("&").find(e => e.startsWith("access_token"))
+    let tval
 
-    if (!t && h && s !== undefined) {
-      t = s.split("=")[1]
-
+    if ( h && s !== undefined) {
+      tval = s.split("=")[1]
+      console.log(tval)
       window.location.hash = ""
-      window.localStorage.setItem("token", t)
+      if (tval !== t) {
+        window.localStorage.removeItem(TOKEN_KEY)
+        window.localStorage.setItem(TOKEN_KEY, tval)
+        
+      }
+      
     }
 
     setToken(t)

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { TokenContext } from "../../context"
-import { getNewReleases } from "../../api"
+import { getNewReleases } from "../../spotify-api"
 import Album from "./Album"
 import { useNavigate } from "react-router-dom"
 import { AppRoute } from "../../routes"

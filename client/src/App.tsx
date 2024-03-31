@@ -25,9 +25,7 @@ const App: React.FC = () => {
       if (tval !== t) {
         window.localStorage.removeItem(TOKEN_KEY)
         window.localStorage.setItem(TOKEN_KEY, tval)
-        
       }
-      
     }
 
     setToken(t)

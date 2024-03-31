@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { TokenContext } from "../../context"
-import { searchAlbums } from "../../api"
+import { searchAlbums } from "../../spotify-api"
 import Album from "./Album"
 
 const AlbumSearch: React.FC = () => {
@@ -11,7 +11,7 @@ const AlbumSearch: React.FC = () => {
 
   useEffect(() => {
     fetchAlbums(inputValue)
-  }, [inputValue])
+  }, [])
 
   const fetchAlbums = async (v: string) => {
     try {

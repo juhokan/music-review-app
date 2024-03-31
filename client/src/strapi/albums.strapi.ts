@@ -1,10 +1,10 @@
-import { StrapiAlbum, StrapiUpdateAlbum } from "./model.strapi"
+import { StrapiAlbum } from "./model.strapi"
 import { StrapiRequest, StrapiResponse, strapiCollectionRequest, strapiRequest } from "./request.strapi"
 import { extractStrapiData } from "./util.strapi"
 
 export interface StrapiAlbumClient {
   readonly getAlbums: () => Promise<StrapiAlbum[]>
-  readonly update: (data: StrapiUpdateAlbum, id?: number) => Promise<StrapiAlbum>
+  readonly update: (data: StrapiAlbum, id?: number) => Promise<StrapiAlbum>
   readonly remove: (token: string, id: number) => Promise<void>
 }
 
@@ -27,7 +27,7 @@ const getAlbums = async () => {
   return response.data
 }
 
-const update = async (data: StrapiUpdateAlbum, id?: number): Promise<StrapiAlbum> => {
+const update = async (data: StrapiAlbum, id?: number): Promise<StrapiAlbum> => {
   const req: StrapiRequest = {
     method: id ? 'PUT' : 'POST',
     path: 'albums',

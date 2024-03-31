@@ -5,10 +5,14 @@
 }
 
 .album-card-page-container {
+  max-width: 1000px;
   margin: 0 auto;
-  display: ruby;
-  place-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+  justify-items: center;
 }
+
 .album-card-container {
   white-space: nowrap;
   overflow-x: scroll;
@@ -37,13 +41,19 @@
   text-align: left;
 }
 
-.album-name {
-  margin-top: 12px !important;
-  margin-bottom: 0px !important;
+.album-name, .album-artist-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .album-artist-name {
   margin-top: 8px !important;
+  margin-bottom: 0px !important;
+}
+
+.album-name {
+  margin-top: 12px !important;
   margin-bottom: 0px !important;
 }
 

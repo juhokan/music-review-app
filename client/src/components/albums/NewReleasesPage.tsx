@@ -2,18 +2,15 @@ import React, { useEffect } from "react"
 import { TokenContext } from "../../context"
 import { getNewReleases } from "../../api"
 import Album from "./Album"
-import { useNavigate } from "react-router-dom"
-import { AppRoute } from "../../routes"
 
-interface NewReleaseProps {
+interface NewReleasesPageProps {
   limit: number
 }
 
-const NewReleases: React.FC<NewReleaseProps> = ({ limit }) => {
+const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = React.useState<any[]>([])
   const { token } = React.useContext(TokenContext)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -31,17 +28,9 @@ const NewReleases: React.FC<NewReleaseProps> = ({ limit }) => {
     fetchAlbums()
   }, [token])
 
-  
-
-
-  const handleAlbumClick = () => {
-    navigate(AppRoute.New)
-  }
-
   return (
     <div>
-     <h2 className='new-releases-header' onClick={handleAlbumClick}>New Releases</h2>
-      <div className='album-card-container'> 
+      <div className='album-card-page-container'> 
         {albums.map(album => (
           <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
         ))}
@@ -50,4 +39,4 @@ const NewReleases: React.FC<NewReleaseProps> = ({ limit }) => {
   )
 }
 
-export default NewReleases
+export default NewReleasesPage

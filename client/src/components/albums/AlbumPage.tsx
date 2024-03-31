@@ -28,7 +28,7 @@ const AlbumPage: React.FC = () => {
 
 
   return (
-    <div className='album-card'>
+    <div className='album-page-card'>
       {album && album.images && album.images.length > 0 && (
         <div>
           <img width={"600px"} src={album.images[0].url} alt='' />

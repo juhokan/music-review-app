@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from "react"
-import { AlbumContext, TokenContext } from "../../context"
+import { TokenContext } from "../../context"
 import { searchAlbums } from "../../api"
+import Album from "./Album"
 
 const AlbumSearch: React.FC = () => {
-  const { albums } = useContext(AlbumContext)
   const { token } = useContext(TokenContext)
   const [inputValue, setInputValue] = useState('') // State to hold the input value
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [spotifyAlbums, setSpotifyAlbums] = useState<any[]>([])
+  const [albums, setAlbums] = useState<any[]>([])
 
   useEffect(() => {
     fetchAlbums(inputValue)
@@ -17,7 +17,7 @@ const AlbumSearch: React.FC = () => {
     try {
       if (token) {
         const items = await searchAlbums(token, v)
-        setSpotifyAlbums(items)
+        setAlbums(items)
       }
     } catch (error) {
       console.error("Error fetching albums:", error)
@@ -47,17 +47,9 @@ const AlbumSearch: React.FC = () => {
         </label>
         <button type='submit'>Submit</button>
       </form>
-      <div>
-        {`strapi has info on ${albums?.length} albums`}
-      </div>
-
-      <div>
-        {spotifyAlbums.map(album => (
-          <div key={album.id}>
-            {album.images.length ? <img width={"100%"} src={album.images[0].url} alt='' /> : <div>No Image</div>}
-            {album.name}
-            {album.id}
-          </div>
+      <div className='album-card-page-container'> 
+        {albums.map(album => (
+          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
         ))}
       </div>
     </div>

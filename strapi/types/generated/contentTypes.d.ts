@@ -368,6 +368,7 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
     singularName: 'album';
     pluralName: 'albums';
     displayName: 'Album';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -375,7 +376,6 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
   attributes: {
     album_id: Attribute.String & Attribute.Required & Attribute.Unique;
     rating: Attribute.Decimal;
-    image_link: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -726,7 +726,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -754,6 +753,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'plugin::users-permissions.user',
       'manyToOne',
       'plugin::users-permissions.role'
+    >;
+    albums: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::album.album'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

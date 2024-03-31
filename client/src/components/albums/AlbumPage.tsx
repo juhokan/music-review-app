@@ -25,6 +25,8 @@ const AlbumPage: React.FC = () => {
     fetchAlbum()
   }, [albumId, token])
 
+
+
   return (
     <div className='album-card'>
       {album && album.images && album.images.length > 0 && (

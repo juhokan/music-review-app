@@ -1,15 +1,18 @@
-import { StrapiAlbum } from "./model.strapi"
-import { StrapiRequest, strapiCollectionRequest } from "./request.strapi"
+import { StrapiAlbum, StrapiUpdateAlbum } from "./model.strapi"
+import { StrapiRequest, StrapiResponse, strapiCollectionRequest, strapiRequest } from "./request.strapi"
+import { extractStrapiData } from "./util.strapi"
 
 export interface StrapiAlbumClient {
   readonly getAlbums: () => Promise<StrapiAlbum[]>
+  readonly update: (data: StrapiUpdateAlbum, id?: number) => Promise<StrapiAlbum>
+  readonly remove: (token: string, id: number) => Promise<void>
 }
 
 const getAlbums = async () => {
   const req: StrapiRequest = {
     method: 'GET',
     path: 'albums',
-    fields: ['rating', 'image_link'],
+    fields: ['rating'],
     populate: [
       { path: ['album_id'], value: 'true' }
     ]
@@ -24,8 +27,36 @@ const getAlbums = async () => {
   return response.data
 }
 
+const update = async (data: StrapiUpdateAlbum, id?: number): Promise<StrapiAlbum> => {
+  const req: StrapiRequest = {
+    method: id ? 'PUT' : 'POST',
+    path: 'albums',
+    body: data,
+    fields: ['rating'],
+    populate: [
+      { path: ['album_id'], value: 'true' }
+    ]
+  }
+
+  const response = await strapiRequest<StrapiResponse<StrapiAlbum>>(req)
+  return extractStrapiData(response)
+}
+
+const remove = async (token: string, id: number) => {
+  const req: StrapiRequest = {
+    method: 'DELETE',
+    path: 'events',
+    id,
+    token
+  }
+
+  extractStrapiData(await strapiRequest(req))
+}
+
 const client: StrapiAlbumClient = {
-  getAlbums
+  getAlbums,
+  update,
+  remove
 }
 
 export default client

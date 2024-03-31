@@ -31,6 +31,7 @@ export interface StrapiUser {
   readonly profile: {
     readonly id: number
   }
+  readonly albums: StrapiAlbum[]
 }
 
 export interface StrapiLogin {
@@ -45,8 +46,10 @@ export class StrapiError {
 interface StrapiAlbumAttributes {
   readonly album_id: string
   readonly rating: number | null
-  readonly image_link: string | null
 }
+
+export interface StrapiUpdateAlbum extends Pick<StrapiAlbumAttributes, 'rating'> {}
+
 
 interface StrapiIdentifier {
   readonly id: number

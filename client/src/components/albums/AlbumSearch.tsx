@@ -32,6 +32,7 @@ const AlbumSearch: React.FC = () => {
     event.preventDefault()
     fetchAlbums(inputValue)
   }
+  
 
   return (
     <div>
@@ -51,7 +52,6 @@ const AlbumSearch: React.FC = () => {
       </div>
 
       <div>
-        {albums?.[0]?.attributes.album_id}
         {spotifyAlbums.map(album => (
           <div key={album.id}>
             {album.images.length ? <img width={"100%"} src={album.images[0].url} alt='' /> : <div>No Image</div>}

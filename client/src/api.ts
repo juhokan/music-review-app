@@ -40,3 +40,16 @@ export const getAlbum = async (token: string, id: string) => {
   console.log(data)
   return data
 }
+
+export const getNewReleases = async (token: string) => {
+  const {data} = await axios.get(`https://api.spotify.com/v1/browse/new-releases`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: {
+      limit: 50
+    }
+  })
+  console.log(data)
+  return data.albums.items
+}

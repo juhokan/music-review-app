@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react"
-import { getAlbum } from "../../api"
+import React, { useEffect, useState, useContext } from "react"
+import { Link, useParams } from "react-router-dom"
 import { TokenContext } from "../../context"
+import { getAlbum } from "../../api"
+import { AppRoute } from "../../routes"
 
-interface AlbumPageProps {
-  id: string;
-}
-
-const AlbumPage: React.FC<AlbumPageProps> = ({ id }) => {
+const AlbumPage: React.FC = () => {
+  const { albumId } = useParams<{ albumId: string }>()
+  const { token } = useContext(TokenContext)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
-  const { token } = React.useContext(TokenContext)
 
   useEffect(() => {
     const fetchAlbum = async () => {
       try {
-        if (token) {
-          const items = await getAlbum(token, id)
-          console.log("Album response:", items)
-          setAlbum(items)
+        if (token && albumId) {
+          const fetchedAlbum = await getAlbum(token, albumId)
+          setAlbum(fetchedAlbum)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
@@ -25,13 +23,17 @@ const AlbumPage: React.FC<AlbumPageProps> = ({ id }) => {
     }
 
     fetchAlbum()
-  }, [id, token])
+  }, [albumId, token])
 
   return (
-    <div>
+    <div className='album-card'>
       {album && album.images && album.images.length > 0 && (
-        <img width={"100%"} src={album.images[0].url} alt='' />
+        <div>
+          <img width={"600px"} src={album.images[0].url} alt='' />
+          <h3>{album.name}</h3>
+        </div>
       )}
+      <Link to={AppRoute.Home}>&lt; Back to Albums</Link>
     </div>
   )
 }

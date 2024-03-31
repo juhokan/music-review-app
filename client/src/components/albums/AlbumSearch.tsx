@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { AlbumContext, TokenContext } from "../../context"
 import { searchAlbums } from "../../api"
 
-const AlbumCard: React.FC = () => {
+const AlbumSearch: React.FC = () => {
   const { albums } = useContext(AlbumContext)
   const { token } = useContext(TokenContext)
   const [inputValue, setInputValue] = useState('') // State to hold the input value
@@ -64,5 +64,5 @@ const AlbumCard: React.FC = () => {
   )
 }
 
-export default AlbumCard
+export default AlbumSearch
 

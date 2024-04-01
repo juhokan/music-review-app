@@ -4,12 +4,13 @@ import { getNewReleases } from "../../api/spotify-api"
 import Album from "./Album"
 import { useNavigate } from "react-router-dom"
 import { AppRoute } from "../../routes"
+import RecentAlbums from "./RecentAlbums"
 
 interface NewReleaseProps {
   limit: number
 }
 
-const NewReleases: React.FC<NewReleaseProps> = ({ limit }) => {
+const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = React.useState<any[]>([])
   const { token } = React.useContext(TokenContext)
@@ -32,22 +33,25 @@ const NewReleases: React.FC<NewReleaseProps> = ({ limit }) => {
   }, [token])
 
   
-
-
-  const handleAlbumClick = () => {
+  const handleHeaderClickNew = () => {
     navigate(AppRoute.New)
   }
 
+
+  
+
   return (
     <div>
-     <h2 className='new-releases-header' onClick={handleAlbumClick}>New Releases</h2>
+     <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
       <div className='album-card-container'> 
         {albums.map(album => (
           <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
         ))}
       </div>
+      <h2 className='new-releases-header'>Most Recent</h2>
+      <RecentAlbums/>
     </div>
   )
 }
 
-export default NewReleases
+export default HomePage

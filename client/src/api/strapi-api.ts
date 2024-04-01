@@ -2,11 +2,21 @@ import axios from 'axios'
 import { STRAPI_TOKEN } from '../config'
 
 export const getAllStrapiAlbums = async () => {
-  const {data} = await axios.get(`http://localhost:1337/api/albums`, {
-    params: {}
-  })
-  console.log(data)
-  return data
+  try {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:1337/api/albums',
+      headers: {}
+    }
+
+    const response = await axios.request(config)
+    console.log(response.data)
+    return response.data.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 export const getStrapiAlbum = async (id: number) => {
@@ -14,15 +24,17 @@ export const getStrapiAlbum = async (id: number) => {
     params: {}
   })
   console.log(data)
-  return data
+  return data.data 
 }
 
-export const putAlbum = async (album_id: string, user_id: number, rating?: number) => {
+export const putAlbum = async (album_id: string, user_id: number, link: string, title: string, rating?: number) => {
   const data = JSON.stringify({
     "data": {
       "album_id": album_id,
       "rating": rating,
-      "user_id": user_id
+      "user_id": user_id,
+      "image_link": link,
+      "title": title
     }
   })
   

@@ -17,11 +17,12 @@ export const getStrapiAlbum = async (id: number) => {
   return data
 }
 
-export const putAlbum = async (id: string, rating: number) => {
+export const putAlbum = async (album_id: string, user_id: number, rating?: number) => {
   const data = JSON.stringify({
     "data": {
-      "album_id": id,
-      "rating": rating
+      "album_id": album_id,
+      "rating": rating,
+      "user_id": user_id
     }
   })
   

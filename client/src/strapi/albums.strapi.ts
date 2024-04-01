@@ -14,7 +14,8 @@ const getAlbums = async () => {
     path: 'albums',
     fields: ['rating'],
     populate: [
-      { path: ['album_id'], value: 'true' }
+      { path: ['album_id'], value: 'true' },
+      { path: ['user_id'], value: 'true' }
     ]
   }
 

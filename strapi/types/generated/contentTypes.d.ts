@@ -375,7 +375,15 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
   };
   attributes: {
     album_id: Attribute.String & Attribute.Required & Attribute.Unique;
-    rating: Attribute.Decimal;
+    rating: Attribute.Decimal &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+          max: 10;
+        },
+        number
+      >;
+    user_id: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -753,11 +761,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'plugin::users-permissions.user',
       'manyToOne',
       'plugin::users-permissions.role'
-    >;
-    albums: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::album.album'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

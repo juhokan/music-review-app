@@ -18,7 +18,13 @@
       "unique": true
     },
     "rating": {
-      "type": "decimal"
+      "type": "decimal",
+      "max": 10,
+      "min": 0
+    },
+    "user_id": {
+      "type": "integer",
+      "required": true
     }
   }
 }

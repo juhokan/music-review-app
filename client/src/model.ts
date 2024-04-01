@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { StrapiAlbum } from './strapi/model.strapi'
 
 export interface AppUser {
-  readonly userId: number | null
-  readonly albums: StrapiAlbum[] | null
+  readonly auth: any | null
 }
 
 export interface ReactChildrenProps {

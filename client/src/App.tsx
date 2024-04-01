@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import './App.css'
-import { AlbumContext, TokenContext } from './context'
-import { StrapiAlbum } from './strapi/model.strapi'
-import strapi from './strapi/client.strapi'
+import { TokenContext, UserContext } from './context'
 import AppContainer from './components/core/AppContainer'
 
 const TOKEN_KEY = 'token'
 
 const App: React.FC = () => {
-
   const [token, setToken] = React.useState<string | null>(null)
-  const [albums, setAlbums] = React.useState<StrapiAlbum[] | null>(null)
+  const [auth, setAuth] = React.useState<any | null>(null)
+
 
   const initToken = () => {
     const h = window.location.hash
@@ -31,14 +30,11 @@ const App: React.FC = () => {
     setToken(t)
   }
 
-  const fetchAlbums = async() => {
-    setAlbums(await strapi.albums.getAlbums())
-  }
 
   React.useEffect(() => {
     initToken()
-    fetchAlbums()
   }, [])
+
 
   const setAndSaveToken = (token: string | null) => {
     if (token) {
@@ -50,13 +46,14 @@ const App: React.FC = () => {
   }
 
 
+
   return (
     <>
-      <AlbumContext.Provider value={{ albums }}>
+      <UserContext.Provider value={{ auth, setAuth }}>
         <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
           <AppContainer/>
         </TokenContext.Provider>
-      </AlbumContext.Provider>
+      </UserContext.Provider>
     </>
   )
 }

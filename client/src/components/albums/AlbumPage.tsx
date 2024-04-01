@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext } from "../../context"
-import { getAlbum } from "../../spotify-api.ts"
+import { getAlbum } from "../../api/spotify-api.ts"
 import { AppRoute } from "../../routes"
-import { putAlbum } from "../../strapi-api.ts"
+import { putAlbum } from "../../api/strapi-api.ts"
 
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()

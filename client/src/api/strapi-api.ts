@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { STRAPI_TOKEN } from './config'
+import { STRAPI_TOKEN } from '../config'
 
 export const getAllStrapiAlbums = async () => {
   const {data} = await axios.get(`http://localhost:1337/api/albums`, {

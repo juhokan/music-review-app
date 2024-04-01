@@ -6,14 +6,21 @@ import AlbumPage from '../albums/AlbumPage'
 import { VALIDATE_URL } from '../../config'
 import NewReleasesPage from '../albums/NewReleasesPage'
 import AlbumSearch from '../albums/AlbumSearch'
+import GoogleAuthCallback from '../../profile/GoogleAuthCallback'
+import UserPage from '../../profile/UserPage'
+import { UserContext } from '../../context'
 
 const AppContainer: React.FC = () => {
+  const { auth: login } = React.useContext(UserContext)
+
 
 
   return (
     
     <Router>
       <Link to={AppRoute.Search}>Search</Link>
+      <Link to='http://localhost:1337/api/connect/google/'>Log in</Link>
+
       <div>
         <Routes>
 
@@ -30,6 +37,10 @@ const AppContainer: React.FC = () => {
           <Route path={AppRoute.Search}>
             <Route index element={<AlbumSearch />} />
             <Route path=':albumId' element={<AlbumPage />} />
+          </Route>
+
+          <Route path='/auth/callback/google'>
+            <Route index element={!login ? <GoogleAuthCallback/> : <UserPage/>}/>
           </Route>
 
 

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { TokenContext } from "../../context"
-import { searchAlbums } from "../../spotify-api"
+import { searchAlbums } from "../../api/spotify-api"
 import Album from "./Album"
 
 const AlbumSearch: React.FC = () => {

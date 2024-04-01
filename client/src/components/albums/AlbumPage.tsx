@@ -1,14 +1,16 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
 import { AppRoute } from "../../routes"
-import { putAlbum } from "../../api/strapi-api.ts"
+import { putAlbum, userScore } from "../../api/strapi-api.ts"
+
 
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
-  const { token } = useContext(TokenContext)
-  const { auth } = useContext(UserContext)
+  const { token } = React.useContext(TokenContext)
+  const { auth } = React.useContext(UserContext)
+  const [score, setScore] = React.useState()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
   const [inputValue, setInputValue] = useState('')
@@ -24,9 +26,23 @@ const AlbumPage: React.FC = () => {
         console.error("Error fetching album:", error)
       }
     }
+    const fetchScore = async (id: number) => {
+      try {
+        if (albumId) {
+          const score = await userScore(id)
+          setScore(score)
+        }
+      } catch (error) {
+        console.error("Error fetching album:", error)
+      }
+    }
 
+    if (auth) {
+      fetchScore(auth.user.id)
+    }
+    
     fetchAlbum()
-  }, [albumId, token])
+  }, [token, auth])
 
   const putNewAlbum = async (id: string, rating: number) => {
     if (auth) {
@@ -55,7 +71,12 @@ const AlbumPage: React.FC = () => {
       {album && album.images && album.images.length > 0 && (
         <div>
           <img width={"600px"} src={album.images[0].url} alt='' />
+          {score !== null && (<h3>{score}</h3>)}
+          {auth && <h3>{auth.user.id}</h3>}
           <h3>{album.name}</h3>
+          <h4>{album.artists[0].name}</h4>
+          <h4>Released: {album.release_date.split("-")[0]}</h4>
+          <h4>Label: {album.label}</h4>
         </div>
       )}
       <form onSubmit={handleSubmit}>

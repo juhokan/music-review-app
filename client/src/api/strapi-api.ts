@@ -59,3 +59,31 @@ export const putAlbum = async (
       console.log(error)
     })
 }
+
+export const userScore = async (id: number) => {
+  try {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:1337/api/albums',
+      headers: {}
+    }
+
+    const response = await axios.request(config)
+    return checkAlbumsforScore(id, response.data.data)
+    
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const checkAlbumsforScore = (id: number, data: any) => {
+  for (const obj of data) {
+    if (obj.attributes.user_id === id) {
+      return obj.attributes.rating
+    }
+  }
+  return null
+}

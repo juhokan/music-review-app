@@ -7,7 +7,7 @@ import { VALIDATE_URL } from '../config'
 
 const UserPage: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { auth, setAuth} = React.useContext(UserContext)
+  const { auth, setAuth } = React.useContext(UserContext)
   const location = useLocation()
 
   useEffect(() => {

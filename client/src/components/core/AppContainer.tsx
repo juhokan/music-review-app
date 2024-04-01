@@ -7,11 +7,8 @@ import { VALIDATE_URL } from '../../config'
 import NewReleasesPage from '../albums/NewReleasesPage'
 import AlbumSearch from '../albums/AlbumSearch'
 import GoogleAuthCallback from '../../profile/GoogleAuthCallback'
-import UserPage from '../../profile/UserPage'
-import { UserContext } from '../../context'
 
 const AppContainer: React.FC = () => {
-  const { auth: login } = React.useContext(UserContext)
 
 
 
@@ -40,7 +37,7 @@ const AppContainer: React.FC = () => {
           </Route>
 
           <Route path='/auth/callback/google'>
-            <Route index element={!login ? <GoogleAuthCallback/> : <UserPage/>}/>
+            <Route index element={<GoogleAuthCallback/>}/>
           </Route>
 
 

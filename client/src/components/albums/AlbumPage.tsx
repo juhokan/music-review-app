@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { Link, useParams } from "react-router-dom"
-import { TokenContext } from "../../context"
+import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
 import { AppRoute } from "../../routes"
 import { putAlbum } from "../../api/strapi-api.ts"
@@ -8,6 +8,7 @@ import { putAlbum } from "../../api/strapi-api.ts"
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
   const { token } = useContext(TokenContext)
+  const { auth } = useContext(UserContext)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
   const [inputValue, setInputValue] = useState('')
@@ -28,7 +29,12 @@ const AlbumPage: React.FC = () => {
   }, [albumId, token])
 
   const putNewAlbum = async (id: string, rating: number) => {
-    putAlbum(id, rating)
+    if (auth) {
+      putAlbum(id, auth.user.id, rating)
+    }
+    else {
+      console.log('no auth')
+    }
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

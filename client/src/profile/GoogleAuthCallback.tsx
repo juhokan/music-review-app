@@ -5,22 +5,28 @@ import React, { useEffect } from 'react'
 
 const GoogleAuthCallback: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { auth, setAuth } = React.useContext(UserContext)
+  const { auth, setAuth} = React.useContext(UserContext)
   const location = useLocation()
 
   useEffect(() => {
     if (!location) {
       return
     }
+  
     const { search } = location
+  
     axios({
       method: 'GET',
       url: `http://localhost:1337/api/auth/google/callback?${search}`
     })
       .then((res) => res.data)
-      .then(setAuth)
-    //hacky solution to fix null setting
-    setAuth(auth)
+      .then((data) => {
+        setAuth(data)
+      })
+      .catch((error) => {
+        console.error('Error fetching authentication data:', error)
+      })
+  
   }, [location])
 
   return (

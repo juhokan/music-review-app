@@ -45,7 +45,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
      <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
       <div className='album-card-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
+          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name} rating={null}/>
         ))}
       </div>
       <h2 className='new-releases-header'>Most Recent</h2>

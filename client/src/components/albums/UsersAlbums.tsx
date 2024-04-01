@@ -34,7 +34,7 @@ const UsersAlbums: React.FC = () => {
         <div className='album-card-container'> 
           <ul>
             {filteredAlbums.map((album) => (
-              <Album key={album.id} id={album.attributes.album_id} link={album.attributes.image_link} name={album.attributes.title} artistName={"TODO"}/>
+              <Album key={album.id} id={album.attributes.album_id} link={album.attributes.image_link} name={album.attributes.title} artistName={album.attributes.artist} rating={album.attributes.rating}/>
             ))}
           </ul>
         </div>

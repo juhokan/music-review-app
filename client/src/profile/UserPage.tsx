@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { UserContext } from '../context'
 import React, { useEffect } from 'react'
 import UsersAlbums from '../components/albums/UsersAlbums'
+import { VALIDATE_URL } from '../config'
 
 const UserPage: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,6 +38,7 @@ const UserPage: React.FC = () => {
           <div>User Id: {auth.user.id}</div>
           <div>Provider: {auth.user.provider}</div>
           <UsersAlbums/>
+          <Link to={VALIDATE_URL}>Validate Token</Link>
         </>        
       )}
     </div>

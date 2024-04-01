@@ -33,6 +33,10 @@
     "title": {
       "type": "string",
       "required": true
+    },
+    "artist": {
+      "type": "string",
+      "required": true
     }
   }
 }

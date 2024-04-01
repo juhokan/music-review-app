@@ -30,7 +30,7 @@ const AlbumPage: React.FC = () => {
 
   const putNewAlbum = async (id: string, rating: number) => {
     if (auth) {
-      putAlbum(id, auth.user.id, album.images[0].url, album.name, rating)
+      putAlbum(id, auth.user.id, album.images[0].url, album.name, album.artists[0].name, rating)
     }
     else {
       console.log('no auth')

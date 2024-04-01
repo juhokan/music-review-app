@@ -27,7 +27,7 @@ const RecentAlbums: React.FC = () => {
   return (
     <div className='album-card-container'>
       {albums.map((album) => (
-        <Album key={album.id} id={album.attributes.album_id} link={album.attributes.image_link} name={album.attributes.title} artistName={"TODO"}/>
+        <Album key={album.id} id={album.attributes.album_id} link={album.attributes.image_link} name={album.attributes.title} artistName={album.attributes.artist} rating={album.attributes.rating}/>
       ))}
     </div>
   )

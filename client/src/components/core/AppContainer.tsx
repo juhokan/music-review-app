@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import HomePage from '../albums/HomePage'
 import { AppRoute } from '../../routes'
 import AlbumPage from '../albums/AlbumPage'
-import { VALIDATE_URL } from '../../config'
 import NewReleasesPage from '../albums/NewReleasesPage'
 import AlbumSearch from '../albums/AlbumSearch'
 import UserPage from '../../profile/UserPage'
@@ -17,7 +16,7 @@ const AppContainer: React.FC = () => {
     <Router>
       <Link to={AppRoute.Home}>Home</Link>
       <Link to={AppRoute.Search}>Search</Link>
-      <Link to='http://localhost:1337/api/connect/google/'>Log in</Link>
+      <Link to='http://localhost:1337/api/connect/google/'>Profile</Link>
       
 
       <div>
@@ -44,7 +43,6 @@ const AppContainer: React.FC = () => {
 
 
         </Routes>
-        <Link to={VALIDATE_URL}>Validate Token</Link>
       </div>
     </Router>
   )

@@ -386,6 +386,7 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
     user_id: Attribute.Integer & Attribute.Required;
     image_link: Attribute.String & Attribute.Required;
     title: Attribute.String & Attribute.Required;
+    artist: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

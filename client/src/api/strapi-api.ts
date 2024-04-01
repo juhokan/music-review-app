@@ -60,7 +60,7 @@ export const putAlbum = async (
     })
 }
 
-export const userScore = async (id: number) => {
+export const userScore = async (id: number, album: string) => {
   try {
     const config = {
       method: 'get',
@@ -68,9 +68,8 @@ export const userScore = async (id: number) => {
       url: 'http://localhost:1337/api/albums',
       headers: {}
     }
-
     const response = await axios.request(config)
-    return checkAlbumsforScore(id, response.data.data)
+    return checkAlbumsforScore(id, album, response.data.data)
     
   } catch (error) {
     console.error(error)
@@ -79,9 +78,10 @@ export const userScore = async (id: number) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const checkAlbumsforScore = (id: number, data: any) => {
+const checkAlbumsforScore = (id: number, album: string, data: any) => {
+  console.log(id + album)
   for (const obj of data) {
-    if (obj.attributes.user_id === id) {
+    if (obj.attributes.user_id === id && obj.attributes.album_id === album) {
       return obj.attributes.rating
     }
   }

@@ -6,17 +6,22 @@ import AlbumPage from '../albums/AlbumPage'
 import NewReleasesPage from '../albums/NewReleasesPage'
 import AlbumSearch from '../albums/AlbumSearch'
 import UserPage from '../../profile/UserPage'
+import GoogleAuthCallback from '../../api/GoogleAuthCallback'
+import { UserContext } from '../../context'
 
 const AppContainer: React.FC = () => {
-
-
+  const { auth } = React.useContext(UserContext)
 
   return (
     
     <Router>
       <Link to={AppRoute.Home}>Home</Link>
       <Link to={AppRoute.Search}>Search</Link>
-      <Link to='http://localhost:1337/api/connect/google/'>Profile</Link>
+      {auth ? 
+        (<Link to={AppRoute.Profile}>Profile</Link>) 
+        : 
+        (<Link to='http://localhost:1337/api/connect/google/'>Log In</Link>)}
+      
       
 
       <div>
@@ -38,8 +43,13 @@ const AppContainer: React.FC = () => {
           </Route>
 
           <Route path='/auth/callback/google'>
+            <Route index element={<GoogleAuthCallback/>}/>
+          </Route>
+
+          <Route path={AppRoute.Profile}>
             <Route index element={<UserPage/>}/>
           </Route>
+
 
 
         </Routes>

@@ -5,6 +5,7 @@ import { TokenContext, UserContext } from './context'
 import AppContainer from './components/core/AppContainer'
 
 const TOKEN_KEY = 'token'
+const AUTH_TOKEN = 'auth'
 
 const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(null)
@@ -33,6 +34,7 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     initToken()
+    initAuth()
   }, [])
 
 
@@ -43,6 +45,13 @@ const App: React.FC = () => {
       window.localStorage.removeItem(TOKEN_KEY)
     }
     initToken()
+  }
+
+  const initAuth = () => {
+    const t = window.localStorage.getItem(AUTH_TOKEN)
+    if (t) {
+      setAuth(JSON.parse(t))
+    }
   }
 
 

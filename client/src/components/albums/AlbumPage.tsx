@@ -10,9 +10,9 @@ const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
   const { token } = React.useContext(TokenContext)
   const { auth } = React.useContext(UserContext)
-  const [score, setScore] = React.useState()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
+  const [score, setScore] = useState<number>()
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
@@ -21,28 +21,26 @@ const AlbumPage: React.FC = () => {
         if (token && albumId) {
           const fetchedAlbum = await getAlbum(token, albumId)
           setAlbum(fetchedAlbum)
-        }
-      } catch (error) {
-        console.error("Error fetching album:", error)
-      }
-    }
-    const fetchScore = async (id: number) => {
-      try {
-        if (albumId) {
-          const score = await userScore(id)
-          setScore(score)
+          console.log(fetchAlbum)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
       }
     }
 
-    if (auth) {
-      fetchScore(auth.user.id)
+    const fetchScore = async () => {
+      try {
+        if (auth && albumId) {
+          const score = await userScore(auth.user.id, albumId)
+          setScore(score)
+        }
+      } catch (error) {
+        console.error("Error fetching album:", error)
+      }
     }
-    
+    fetchScore()
     fetchAlbum()
-  }, [token, auth])
+  }, [token, albumId])
 
   const putNewAlbum = async (id: string, rating: number) => {
     if (auth) {
@@ -71,8 +69,7 @@ const AlbumPage: React.FC = () => {
       {album && album.images && album.images.length > 0 && (
         <div>
           <img width={"600px"} src={album.images[0].url} alt='' />
-          {score !== null && (<h3>{score}</h3>)}
-          {auth && <h3>{auth.user.id}</h3>}
+          <h3>{score}</h3>
           <h3>{album.name}</h3>
           <h4>{album.artists[0].name}</h4>
           <h4>Released: {album.release_date.split("-")[0]}</h4>

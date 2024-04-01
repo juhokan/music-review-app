@@ -17,10 +17,7 @@ const AppContainer: React.FC = () => {
     <Router>
       <Link to={AppRoute.Home}>Home</Link>
       <Link to={AppRoute.Search}>Search</Link>
-      {auth ? 
-        (<Link to={AppRoute.Profile}>Profile</Link>) 
-        : 
-        (<Link to='http://localhost:1337/api/connect/google/'>Log In</Link>)}
+      <Link to={AppRoute.Profile}>Profile</Link> 
       
       
 

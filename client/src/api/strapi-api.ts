@@ -69,7 +69,7 @@ export const userScore = async (id: number, album: string) => {
       headers: {}
     }
     const response = await axios.request(config)
-    return checkAlbumsforScore(id, album, response.data.data)
+    return checkAlbumsForScore(id, album, response.data.data)
     
   } catch (error) {
     console.error(error)
@@ -78,11 +78,10 @@ export const userScore = async (id: number, album: string) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const checkAlbumsforScore = (id: number, album: string, data: any) => {
-  console.log(id + album)
+const checkAlbumsForScore = (id: number, album: string, data: any) => {
   for (const obj of data) {
     if (obj.attributes.user_id === id && obj.attributes.album_id === album) {
-      return obj.attributes.rating
+      return obj
     }
   }
   return null

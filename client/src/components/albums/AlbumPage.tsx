@@ -13,6 +13,7 @@ const AlbumPage: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
   const [score, setScore] = useState<number>()
+  const [logId, setLogId] = useState<number>()
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
@@ -21,7 +22,6 @@ const AlbumPage: React.FC = () => {
         if (token && albumId) {
           const fetchedAlbum = await getAlbum(token, albumId)
           setAlbum(fetchedAlbum)
-          console.log(fetchAlbum)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
@@ -32,7 +32,8 @@ const AlbumPage: React.FC = () => {
       try {
         if (auth && albumId) {
           const score = await userScore(auth.user.id, albumId)
-          setScore(score)
+          setScore(score.attributes.rating)
+          setLogId(score.id)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
@@ -49,6 +50,10 @@ const AlbumPage: React.FC = () => {
     else {
       console.log('no auth')
     }
+  }
+
+  const patchAlbum = async (id: string, rating: number) => {
+    //TODO
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

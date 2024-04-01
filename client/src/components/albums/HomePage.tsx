@@ -30,7 +30,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
     }
 
     fetchAlbums()
-  }, [token])
+  }, [limit, token])
 
   
   const handleHeaderClickNew = () => {

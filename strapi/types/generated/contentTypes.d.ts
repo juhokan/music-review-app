@@ -404,6 +404,38 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
   };
 }
 
+export interface ApiUserProfileUserProfile extends Schema.CollectionType {
+  collectionName: 'user_profiles';
+  info: {
+    singularName: 'user-profile';
+    pluralName: 'user-profiles';
+    displayName: 'UserProfile';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    display_name: Attribute.String;
+    user_id: Attribute.Integer;
+    profile_image: Attribute.Media & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-profile.user-profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-profile.user-profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -840,6 +872,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::album.album': ApiAlbumAlbum;
+      'api::user-profile.user-profile': ApiUserProfileUserProfile;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import './App.css'
-import { TokenContext, UserContext } from './context'
+import { ProfileContext, TokenContext, UserContext } from './context'
 import AppContainer from './components/core/AppContainer'
+import { StrapiProfile } from './strapi/model.strapi'
+import strapi from './strapi/client.strapi'
 
 const TOKEN_KEY = 'token'
 const AUTH_TOKEN = 'auth'
@@ -10,6 +12,7 @@ const AUTH_TOKEN = 'auth'
 const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(null)
   const [auth, setAuth] = React.useState<any | null>(null)
+  const [profiles, setProfiles] = React.useState<StrapiProfile[] | null>(null)
 
 
   const initToken = () => {
@@ -31,10 +34,15 @@ const App: React.FC = () => {
     setToken(t)
   }
 
+  const fetchProfiles = async () => {
+    setProfiles(await strapi.profiles.getProfiles())
+  }
+
 
   React.useEffect(() => {
     initToken()
     initAuth()
+    fetchProfiles()
   }, [])
 
 
@@ -60,9 +68,11 @@ const App: React.FC = () => {
   return (
     <>
       <UserContext.Provider value={{ auth, setAuth }}>
-        <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
-          <AppContainer/>
-        </TokenContext.Provider>
+        <ProfileContext.Provider value={{ profiles }}>
+          <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
+            <AppContainer/>
+          </TokenContext.Provider>
+        </ProfileContext.Provider>
       </UserContext.Provider>
     </>
   )

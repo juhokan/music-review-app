@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import './App.css'
-import { AlbumContext, TokenContext } from './context'
-import { StrapiAlbum } from './strapi/model.strapi'
-import strapi from './strapi/client.strapi'
+import { ProfileContext, TokenContext, UserContext } from './context'
 import AppContainer from './components/core/AppContainer'
+import { StrapiProfile } from './strapi/model.strapi'
+import strapi from './strapi/client.strapi'
 
 const TOKEN_KEY = 'token'
+const AUTH_TOKEN = 'auth'
 
 const App: React.FC = () => {
-
   const [token, setToken] = React.useState<string | null>(null)
-  const [albums, setAlbums] = React.useState<StrapiAlbum[] | null>(null)
+  const [auth, setAuth] = React.useState<any | null>(null)
+  const [profiles, setProfiles] = React.useState<StrapiProfile[] | null>(null)
+
 
   const initToken = () => {
     const h = window.location.hash
@@ -31,14 +34,17 @@ const App: React.FC = () => {
     setToken(t)
   }
 
-  const fetchAlbums = async() => {
-    setAlbums(await strapi.albums.getAlbums())
+  const fetchProfiles = async () => {
+    setProfiles(await strapi.profiles.getProfiles())
   }
+
 
   React.useEffect(() => {
     initToken()
-    fetchAlbums()
+    initAuth()
+    fetchProfiles()
   }, [])
+
 
   const setAndSaveToken = (token: string | null) => {
     if (token) {
@@ -49,14 +55,25 @@ const App: React.FC = () => {
     initToken()
   }
 
+  const initAuth = () => {
+    const t = window.localStorage.getItem(AUTH_TOKEN)
+    if (t) {
+      setAuth(JSON.parse(t))
+    }
+  }
+
+
+
 
   return (
     <>
-      <AlbumContext.Provider value={{ albums }}>
-        <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
-          <AppContainer/>
-        </TokenContext.Provider>
-      </AlbumContext.Provider>
+      <UserContext.Provider value={{ auth, setAuth }}>
+        <ProfileContext.Provider value={{ profiles }}>
+          <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
+            <AppContainer/>
+          </TokenContext.Provider>
+        </ProfileContext.Provider>
+      </UserContext.Provider>
     </>
   )
 }

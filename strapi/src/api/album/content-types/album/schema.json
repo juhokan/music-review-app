@@ -25,6 +25,18 @@
     "user_id": {
       "type": "integer",
       "required": true
+    },
+    "image_link": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "artist": {
+      "type": "string",
+      "required": true
     }
   }
 }

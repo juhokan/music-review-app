@@ -21,6 +21,8 @@ export interface StrapiPaged<T> {
 }
 
 export interface StrapiAlbum extends StrapiResource<StrapiAlbumAttributes> {}
+export interface StrapiProfile extends StrapiResource<StrapiProfileAttributes> {}
+export interface StrapiImage extends StrapiResource<StrapiImageAttributes> {}
 
 export interface StrapiUser {
   readonly id: number
@@ -46,6 +48,17 @@ interface StrapiAlbumAttributes {
   readonly album_id: string
   readonly rating: number | null
   readonly user_id: number
+}
+
+interface StrapiProfileAttributes {
+  readonly display_name: string
+  readonly user_id: number
+  readonly profile_image: StrapiDataWrapper<StrapiImage>
+}
+
+interface StrapiImageAttributes {
+  readonly url: string
+  readonly alternativeText: string
 }
 
 export interface StrapiUpdateAlbum extends Pick<StrapiAlbumAttributes, 'rating'> {}

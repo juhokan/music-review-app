@@ -1,19 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
 import { AppRoute } from "../../routes"
-import { putAlbum, userScore } from "../../api/strapi-api.ts"
+import { postAlbum, putAlbum, userScore } from "../../api/strapi-api.ts"
 
 
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
   const { token } = React.useContext(TokenContext)
   const { auth } = React.useContext(UserContext)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [album, setAlbum] = useState<any>(null)
-  const [score, setScore] = useState<number>()
-  const [logId, setLogId] = useState<number>()
+  const [log, setLog] = useState<any>()
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
@@ -31,9 +30,8 @@ const AlbumPage: React.FC = () => {
     const fetchScore = async () => {
       try {
         if (auth && albumId) {
-          const score = await userScore(auth.user.id, albumId)
-          setScore(score.attributes.rating)
-          setLogId(score.id)
+          const l = await userScore(auth.user.id, albumId)
+          setLog(l)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
@@ -41,19 +39,26 @@ const AlbumPage: React.FC = () => {
     }
     fetchScore()
     fetchAlbum()
-  }, [token, albumId])
+  }, [token, albumId, auth])
 
-  const putNewAlbum = async (id: string, rating: number) => {
+  const postNewAlbum = async (id: string, rating: number) => {
     if (auth) {
-      putAlbum(id, auth.user.id, album.images[0].url, album.name, album.artists[0].name, rating)
+      await postAlbum(id, auth.user.id, album.images[0].url, album.name, album.artists[0].name, rating)
+      window.location.reload()
     }
     else {
       console.log('no auth')
     }
   }
 
-  const patchAlbum = async (id: string, rating: number) => {
-    //TODO
+  const putExistingAlbum = async (rating: number) => {
+    if (auth && log) {
+      await putAlbum(log.id, rating)
+      window.location.reload()
+    }
+    else {
+      console.log('no auth')
+    }
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +68,12 @@ const AlbumPage: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (albumId) {
-      putNewAlbum(albumId, parseInt(inputValue))
+      if (log) {
+        putExistingAlbum(parseInt(inputValue))
+      }
+      else {
+        postNewAlbum(albumId, parseInt(inputValue))
+      }
     }
   }
 
@@ -74,24 +84,30 @@ const AlbumPage: React.FC = () => {
       {album && album.images && album.images.length > 0 && (
         <div>
           <img width={"600px"} src={album.images[0].url} alt='' />
-          <h3>{score}</h3>
+          <form onSubmit={handleSubmit}>
+            <label>
+          Enter rating:
+              <input
+                type='text'
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+            </label>
+            <button type='submit'>Submit</button>
+          </form>
+          {log && log.attributes.rating && (<h3>Current rating: {log.attributes.rating}</h3>)}
           <h3>{album.name}</h3>
           <h4>{album.artists[0].name}</h4>
           <h4>Released: {album.release_date.split("-")[0]}</h4>
           <h4>Label: {album.label}</h4>
+          <h3>Tracks</h3>
+          {album.tracks.items.map((track: any) => (
+            <h4>{track.name}</h4>
+          ))}
+          <Link to={album.external_urls.spotify}>Listen</Link>
         </div>
       )}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter rating:
-          <input
-            type='text'
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type='submit'>Submit</button>
-      </form>
+      
       
       <Link to={AppRoute.Home}>&lt; Back to Albums</Link>
     </div>

@@ -3,14 +3,21 @@ import { TokenContext } from "../../context"
 import { searchAlbums } from "../../api/spotify-api"
 import Album from "./Album"
 
-const AlbumSearch: React.FC = () => {
+interface AlbumSearchProps {
+  readonly inputValue: string | null
+}
+
+const AlbumSearch: React.FC<AlbumSearchProps> = ({ inputValue }) => {
   const { token } = useContext(TokenContext)
-  const [inputValue, setInputValue] = useState('') // State to hold the input value
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = useState<any[]>([])
+  const [pageInput, setPageInput] = useState('')
 
   useEffect(() => {
-    fetchAlbums(inputValue)
+    if (inputValue) {
+      setPageInput(inputValue)
+      fetchAlbums(inputValue)
+    }
   }, [])
 
   const fetchAlbums = async (v: string) => {
@@ -24,32 +31,32 @@ const AlbumSearch: React.FC = () => {
     }
   }
 
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
+    setPageInput(event.target.value)
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    fetchAlbums(inputValue)
+    fetchAlbums(pageInput)
   }
   
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>
-          Enter album name:
-          <input
-            type='text'
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type='submit'>Submit</button>
+        <input type='text' value={pageInput} className='search-page' onChange={handleInputChange}/>
       </form>
+
       <div className='album-card-page-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
+          <Album 
+            key={album.id} 
+            id={album.id} 
+            link={album.images[0].url} 
+            name={album.name} 
+            artistName={album.artists[0].name} 
+            rating={null}/>
         ))}
       </div>
     </div>

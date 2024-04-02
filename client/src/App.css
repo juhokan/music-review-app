@@ -1,6 +1,6 @@
 #root {
   margin: 0 auto;
-  padding-top: 2rem;
+  padding-top: 5rem;
   text-align: center;
 }
 
@@ -56,6 +56,101 @@
 .album-name {
   margin-top: 12px !important;
   margin-bottom: 0px !important;
+}
+.header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: black;
+  z-index: 1000;
+}
+
+.header-image {
+  margin: 0 auto;
+}
+
+.header-profile-link {
+  padding-left: 12px;
+}
+
+.header-profile-image, .header-profile-link {
+  border-radius: 32px;
+  height: 32px;
+  width: 32px;
+}
+
+.header-link-container {
+  position: absolute;
+  align-items: center;
+  display: flex;
+  margin-right: auto;
+  top: auto;
+  right: 32px;
+}
+
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+   color: transparent;
+}
+
+.profile-image {
+  height: 150px;
+  width: 150px;
+  border-radius: 150px;
+}
+
+.search-hover {
+  color: transparent;
+  background: url('/src/assets/icons/search.svg') no-repeat left;
+  background-size: 15px;
+  background-position: 10px 9px;
+  background-color: black !important;
+  border: 1px solid;
+  border-color: transparent !important;
+  border-radius: 32px;
+  width: 32px;
+  height: 32px;
+  transition: all 0.5s;
+}
+
+.search-page {
+  color: transparent;
+  background: url('/src/assets/icons/search.svg') no-repeat left;
+  background-size: 15px;
+  background-position: 10px 9px;
+  background-color: black !important;
+  color: white;
+  border: 1px solid #ccc !important;
+  border-radius: 32px;
+  width: 300px;
+  height: 32px;
+  padding-left: 50px;
+}
+
+.search-page:focus-visible {
+  outline: transparent !important;
+}
+
+.search-hover:hover {
+  color: white;
+  border: 1px solid #ccc !important;
+  width: 300px;
+  padding-left: 50px;
+}
+
+.search-hover:focus-visible {
+  color: white;
+  border: 1px solid #ccc !important;
+  outline: transparent !important;
+  width: 300px;
+  padding-left: 50px;
 }
 
 .rating-block {

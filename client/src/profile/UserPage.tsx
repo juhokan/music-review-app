@@ -103,7 +103,7 @@ const UserPage: React.FC = () => {
           
           
           {recentActivity()}
-          <Link to={VALIDATE_URL}>Validate Token</Link>
+          <Link className='validate-token' to={VALIDATE_URL}>Validate Token</Link>
         </>
       ) : (
         <h2>No Profile Found</h2>

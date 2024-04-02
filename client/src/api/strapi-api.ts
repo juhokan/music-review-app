@@ -89,6 +89,24 @@ export const putAlbum = async (id: number, rating: number) => {
   
 }
 
+export const deleteAlbum = async (id: number) => {
+  const config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: `http://localhost:1337/api/albums/${id}`,
+    headers: { }
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  
+}
+
 export const userScore = async (id: number, album: string) => {
   try {
     const config = {

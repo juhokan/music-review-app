@@ -104,6 +104,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
 }
 
 .profile-container {
@@ -195,6 +196,104 @@
   padding-left: 50px;
 }
 
+.rating-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-album-text {
+  margin: 0;
+  padding-bottom: 16px;
+}
+
+.rating-artist-text {
+  margin: 0;
+  padding-top: 12px;
+  padding-bottom: 20px;
+  font-size: 24px;
+}
+
+.rating-album-data-container {
+  text-align: left;
+  width: 600px;
+  position: relative;
+}
+
+.tracks {
+  padding-top: 2rem;
+}
+
+.rating-album-buttons {
+  position: absolute;
+  text-align: center !important;
+  top: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.rating-track-container {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  height: 32px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.listened-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px !important;
+  width: 48px !important;
+  border-radius: 48px;
+  z-index: 999;
+  cursor: pointer;
+  margin-bottom: 12px;
+  margin-top: 6px;
+}
+
+.listened-button-active {
+  background-color: blue;
+}
+
+.listened-button-inactive {
+  background-color: grey;
+  transition: background-color 0.3s ease;
+}
+
+.listened-button-inactive:hover {
+  background-color: white;
+}
+
+.listened-icon {
+  height: 20px;
+  padding-bottom: 4px;
+}
+
+.listened-icon-inactive {
+  filter: brightness(0%);
+}
+
+.spotify-icon {
+  height: 48px;
+  filter: brightness(75%);
+}
+
+.rating-track-name {
+  color: white;
+  padding-right: 8px;
+  margin: 0;
+}
+.rating-track-info {
+  height: 32px;
+}
+
+.rating-track-title, .rating-track-info {
+  margin: 0;
+}
+
 .rating-block {
   position: absolute;
   top: 8px;
@@ -209,12 +308,46 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
+.rating-component {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rating-component-inactive {
+  padding: 1rem;
+  color: gray;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.rating-component-inactive:hover {
+  transform: scale(1.5);
+  color: rgb(229, 229, 229);
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+.rating-text-inactive {
+  font-size: 20px;
+}
+
+
+.rating-component-active {
+  padding: 1rem;
+  color: white;
+}
+.rating-component-active:hover {
+  cursor: pointer;
+}
+.rating-text-active {
+  font-size: 32px;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+
 .new-releases-header {
   text-align: left;
   margin: 0;
   padding-left: 2rem;
   cursor: pointer;
-  transition: transform 0.3s ease;
 }
 
 .new-release-link-card {

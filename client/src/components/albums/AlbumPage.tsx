@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
-import { AppRoute } from "../../routes"
 import { deleteAlbum, postAlbum, putAlbum, userScore } from "../../api/strapi-api.ts"
 import listened from "../../assets/icons/listened.svg"
 import spotifyIcon from "../../assets/icons/spotify.svg"
@@ -186,9 +185,6 @@ const AlbumPage: React.FC = () => {
           {albumData()}
         </div>
       )}
-      
-      
-      <Link to={AppRoute.Home}>&lt; Back to Albums</Link>
     </div>
   )
 }

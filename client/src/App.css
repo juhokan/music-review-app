@@ -200,10 +200,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 6rem;
 }
 
 .rating-album-text {
   margin: 0;
+  width: 500px;
   padding-bottom: 16px;
 }
 
@@ -255,7 +257,7 @@
 }
 
 .listened-button-active {
-  background-color: blue;
+  background-color: rgb(54, 54, 230);
 }
 
 .listened-button-inactive {

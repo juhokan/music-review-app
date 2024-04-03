@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.49 70.29">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Hi_Fi_Text_Logo" data-name="Hi!Fi Text Logo">
+    <g>
+      <path class="cls-1" d="M0,0h9.62v29.05h36.13V0h9.62v70.29h-9.62v-32.87H9.62v32.87H0V0Z"/>
+      <path class="cls-1" d="M62.64,0h8.76v9.76h-8.76V0ZM62.64,19.28h8.76v51.01h-8.76V19.28Z"/>
+      <path class="cls-1" d="M93.45,70.29h-8.76v-9.76h8.76v9.76ZM93.45,51.01h-8.76V0h8.76v51.01Z"/>
+      <path class="cls-1" d="M105.85,0h48.76v8.61h-39.24v21.34h34.5v8.37h-34.5v31.96h-9.52V0Z"/>
+      <path class="cls-1" d="M158.73,0h8.76v9.76h-8.76V0ZM158.73,19.28h8.76v51.01h-8.76V19.28Z"/>
+    </g>
+  </g>
+</svg>

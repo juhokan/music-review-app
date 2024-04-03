@@ -16,6 +16,11 @@ interface ProfileCtx {
   readonly profiles: StrapiProfile[] | null
 }
 
+interface SearchCtx {
+  readonly input: string | null
+  readonly setInput: (input: string | null) => void
+}
+
 export const TokenContext = React.createContext<TokenCtx> ({
   token: null,
   setToken: _ => { /* NOP */ } // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -28,4 +33,9 @@ export const UserContext = React.createContext<UserCtx>({
 
 export const ProfileContext = React.createContext<ProfileCtx>({
   profiles: null
+})
+
+export const SearchContext = React.createContext<SearchCtx>({
+  input: null,
+  setInput: _ => { /* NOP */ } // eslint-disable-line @typescript-eslint/no-unused-vars
 })

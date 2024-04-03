@@ -27,7 +27,8 @@ export const getStrapiAlbum = async (id: number) => {
   return data.data 
 }
 
-export const putAlbum = async (
+
+export const postAlbum = async (
   album_id: string, user_id: number, link: string, title: string, artist: string, rating?: number) => {
   const data = JSON.stringify({
     "data": {
@@ -58,6 +59,52 @@ export const putAlbum = async (
     .catch((error) => {
       console.log(error)
     })
+}
+
+
+export const putAlbum = async (id: number, rating: number) => {
+  const data = JSON.stringify({
+    "data": {
+      "rating": rating
+    }
+  })
+  
+  const config = {
+    method: 'put',
+    maxBodyLength: Infinity,
+    url: `http://localhost:1337/api/albums/${id}`,
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  
+}
+
+export const deleteAlbum = async (id: number) => {
+  const config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: `http://localhost:1337/api/albums/${id}`,
+    headers: { }
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  
 }
 
 export const userScore = async (id: number, album: string) => {

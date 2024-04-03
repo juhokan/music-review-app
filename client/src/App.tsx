@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import './App.css'
-import { ProfileContext, TokenContext, UserContext } from './context'
+import { ProfileContext, SearchContext, TokenContext, UserContext } from './context'
 import AppContainer from './components/core/AppContainer'
 import { StrapiProfile } from './strapi/model.strapi'
 import strapi from './strapi/client.strapi'
@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(null)
   const [auth, setAuth] = React.useState<any | null>(null)
   const [profiles, setProfiles] = React.useState<StrapiProfile[] | null>(null)
+  const [input, setInput] = React.useState<string | null>(null)
 
 
   const initToken = () => {
@@ -70,7 +71,9 @@ const App: React.FC = () => {
       <UserContext.Provider value={{ auth, setAuth }}>
         <ProfileContext.Provider value={{ profiles }}>
           <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
-            <AppContainer/>
+            <SearchContext.Provider value={{ input, setInput }}>
+              <AppContainer/>
+            </SearchContext.Provider>
           </TokenContext.Provider>
         </ProfileContext.Provider>
       </UserContext.Provider>

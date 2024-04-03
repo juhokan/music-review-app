@@ -21,7 +21,6 @@ const Header: React.FC = () => {
     
     if (profiles && auth) {
       Object.values(profiles).forEach((profile) => {
-        console.log(profile)
         if (profile.attributes.user_id === auth.user.id) {
           setCurrent(profile)
           return // exit loop early once a matching profile is found

@@ -114,13 +114,12 @@ function createAxiosResponseInterceptor(refreshToken: string, setToken: (token: 
             setToken(response.data.access_token)
             window.localStorage.setItem(TOKEN_KEY, response.data.access_token)
             error.response.config.headers["Authorization"] = "Bearer " + response.data.access_token
-            // Retry the initial call, but with the updated token in the headers.
-            // Resolves the promise if successful
+
             return axios(error.response.config)
           })
           .catch((error2) => {
             console.error('Error refreshing token:', error2)
-            // Retry failed, clean up and reject the promise
+            
             setToken(null)
             return Promise.reject(error2)
           })

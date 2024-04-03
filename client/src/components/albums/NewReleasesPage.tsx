@@ -31,7 +31,7 @@ const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
     }
 
     fetchAlbums()
-  }, [token])
+  }, [refreshToken, token])
 
   return (
     <div>

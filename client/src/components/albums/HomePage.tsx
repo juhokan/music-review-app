@@ -33,7 +33,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
       createAxiosResponseInterceptor(refreshToken, setToken)
     }
     fetchAlbums()
-  }, [limit, token])
+  }, [limit, refreshToken, token])
 
   
   const handleHeaderClickNew = () => {

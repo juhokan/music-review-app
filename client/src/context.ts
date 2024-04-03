@@ -6,6 +6,10 @@ import { StrapiProfile } from "./strapi/model.strapi"
 interface TokenCtx {
   readonly token: string | null
   readonly setToken: (token: string | null) => void
+  readonly refreshToken: string | null
+  readonly setRefreshToken: (token: string | null) => void
+  readonly expiresAt: string | null
+  readonly setExpiresAt: (expireAt: string | null) => void
 }
 
 interface UserCtx extends AppUser {
@@ -23,7 +27,11 @@ interface SearchCtx {
 
 export const TokenContext = React.createContext<TokenCtx> ({
   token: null,
-  setToken: _ => { /* NOP */ } // eslint-disable-line @typescript-eslint/no-unused-vars
+  setToken: _ => { /* NOP */ }, // eslint-disable-line @typescript-eslint/no-unused-vars
+  refreshToken: null,
+  setRefreshToken: _ => { /* NOP */ }, // eslint-disable-line @typescript-eslint/no-unused-vars
+  expiresAt: null,
+  setExpiresAt: _ => { /* NOP */ } // eslint-disable-line @typescript-eslint/no-unused-vars
 })
 
 export const UserContext = React.createContext<UserCtx>({

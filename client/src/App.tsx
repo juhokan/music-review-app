@@ -11,10 +11,44 @@ const AUTH_TOKEN = 'auth'
 
 const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(null)
+  const [refreshToken, setRefreshToken] = React.useState<string | null>(null)
+  const [expiresAt, setExpiresAt] = React.useState<string | null>(null)
   const [auth, setAuth] = React.useState<any | null>(null)
   const [profiles, setProfiles] = React.useState<StrapiProfile[] | null>(null)
   const [input, setInput] = React.useState<string | null>(null)
 
+  //TODO
+  /*
+  const initToken = () => {
+    const hash = window.location.hash
+    const token = window.localStorage.getItem(TOKEN_KEY)
+    const currentRefresh = window.localStorage.getItem(REFRESH_TOKEN_KEY)
+    const accessToken = hash.substring(1).split("&").find(e => e.startsWith("access_token"))
+    console.log(currentRefresh)
+    const refresh = hash.substring(1).split("&").find(e => e.startsWith("refresh_token"))
+    const expires = hash.substring(1).split("&").find(e => e.startsWith("expires_in"))
+
+    
+
+
+    if ( hash && accessToken !== undefined && expires !== undefined && refresh !== undefined) {
+      const newToken = accessToken.split("=")[1]
+      const newRefreshToken = refresh.split("=")[1]
+      const newExpires = expires.split("=")[1]
+      setExpiresAt(newExpires)
+      if (newToken !== token) {
+        window.localStorage.removeItem(TOKEN_KEY)
+        window.localStorage.setItem(TOKEN_KEY, newToken)
+      }
+      if (newRefreshToken !== refreshToken) {
+        window.localStorage.removeItem(REFRESH_TOKEN_KEY)
+        window.localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken)
+      }
+      setRefreshToken(window.localStorage.getItem(REFRESH_TOKEN_KEY))
+      setToken(window.localStorage.getItem(TOKEN_KEY))
+    }
+  }
+  */
 
   const initToken = () => {
     const h = window.location.hash
@@ -63,14 +97,13 @@ const App: React.FC = () => {
     }
   }
 
-
-
-
+  
   return (
     <>
       <UserContext.Provider value={{ auth, setAuth }}>
         <ProfileContext.Provider value={{ profiles }}>
-          <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
+          <TokenContext.Provider 
+            value={{token, setToken: setAndSaveToken, expiresAt, setExpiresAt, refreshToken, setRefreshToken}}>
             <SearchContext.Provider value={{ input, setInput }}>
               <AppContainer/>
             </SearchContext.Provider>

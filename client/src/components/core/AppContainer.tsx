@@ -9,6 +9,7 @@ import UserPage from '../../profile/UserPage'
 import GoogleAuthCallback from '../../api/GoogleAuthCallback'
 import Header from './Header'
 import { SearchContext } from '../../context'
+import CallbackPage from './CallbackPage'
 
 const AppContainer: React.FC = () => {
   const { input } = React.useContext(SearchContext)
@@ -44,6 +45,10 @@ const AppContainer: React.FC = () => {
 
           <Route path={AppRoute.Profile}>
             <Route index element={<UserPage/>}/>
+          </Route>
+
+          <Route path={AppRoute.Callback}>
+            <Route index element={<CallbackPage/>}/>
           </Route>
 
 

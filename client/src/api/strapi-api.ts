@@ -84,7 +84,8 @@ export const putAlbum = async (id: number, rating: number) => {
       console.log(JSON.stringify(response.data))
     })
     .catch((error) => {
-      console.log(error)
+      console.log('put request not allowed:')
+      console.error(error)
     })
   
 }

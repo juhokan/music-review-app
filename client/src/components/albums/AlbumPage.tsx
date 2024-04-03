@@ -158,7 +158,7 @@ const AlbumPage: React.FC = () => {
       const str = i.toString()
       if (log && log.attributes.rating && i === log.attributes.rating) {
         ratingComponents.push(
-          <div key={i} className='rating-component-active'>
+          <div className='rating-component-active'>
             <h3 className='rating-text-active' onClick={() => handleInputChange('')}>{i}</h3>
           </div>)
       }

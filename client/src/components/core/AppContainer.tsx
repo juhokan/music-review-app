@@ -13,7 +13,6 @@ import CallbackPage from './CallbackPage'
 
 const AppContainer: React.FC = () => {
   const { input } = React.useContext(SearchContext)
-  
 
   return (
     

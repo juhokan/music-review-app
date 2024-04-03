@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { CLIENT_ID } from '../config'
+import { CLIENT_ID, CLIENT_SECRET } from '../config'
+const TOKEN_KEY = 'token'
 
 
 export const searchArtists = async (token: string, key: string) => {
@@ -87,18 +88,31 @@ function createAxiosResponseInterceptor(refreshToken: string, setToken: (token: 
 
       if (refreshToken) {
         console.log('Refreshing token...')
-        const url = 'https://accounts.spotify.com/api/token'
+        const authHeader = `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
 
-        const payload = new URLSearchParams({
+        const authData = new URLSearchParams({
+          grant_type: 'refresh_token',
           refresh_token: refreshToken,
-          client_id: CLIENT_ID,
-          grant_type: 'refresh_token'
-        })
+          client_id: CLIENT_ID
+        }).toString()
+  
+        const authOptions = {
+          method: 'POST',
+          url: 'https://accounts.spotify.com/api/token',
+          data: authData,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': authHeader
+          }
+        }
+  
+        console.log('Payload:', authData)
 
-        return axios.post(url, payload)
+        return axios.post(authOptions.url, authOptions.data, { headers: authOptions.headers })
           .then((response) => {
             console.log('Token refreshed successfully.')
             setToken(response.data.access_token)
+            window.localStorage.setItem(TOKEN_KEY, response.data.access_token)
             error.response.config.headers["Authorization"] = "Bearer " + response.data.access_token
             // Retry the initial call, but with the updated token in the headers.
             // Resolves the promise if successful

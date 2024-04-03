@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
 import { deleteAlbum, postAlbum, putAlbum, userScore } from "../../api/strapi-api.ts"
-import listened from "../../assets/icons/listened.svg"
+import listenedIcon from "../../assets/icons/listened.svg"
 import spotifyIcon from "../../assets/icons/spotify.svg"
 
 
@@ -14,6 +14,7 @@ const AlbumPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const [album, setAlbum] = useState<any>(null)
   const [log, setLog] = useState<any>()
+  const [listened, setListened] = useState<any>()
   const [currentRating, setCurrentRating] = useState<number | undefined>()
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const AlbumPage: React.FC = () => {
     }
     fetchScore()
     fetchAlbum()
-  }, [token, albumId, auth])
+  }, [token, albumId, auth, listened])
 
   const postNewAlbum = async (id: string, rating: number) => {
     if (auth) {
@@ -67,6 +68,7 @@ const AlbumPage: React.FC = () => {
   const deleteExistingAlbum = async () => {
     if (auth && log) {
       await deleteAlbum(log.id)
+      setLog(null)
       window.location.reload()
     }
     else {
@@ -77,6 +79,7 @@ const AlbumPage: React.FC = () => {
   const handleDelete = () => {
     if (albumId && log) {
       console.log(log)
+      setCurrentRating(undefined)
       deleteExistingAlbum()
     }
   }
@@ -89,6 +92,7 @@ const AlbumPage: React.FC = () => {
         putExistingAlbum(parseInt(input))
         
       } else {
+        setListened(true)
         setCurrentRating(parseInt(input))
         postNewAlbum(albumId, parseInt(input))
       }
@@ -128,17 +132,17 @@ const AlbumPage: React.FC = () => {
   const albumButtons = () => {
     const albumButtons = []
 
-    if (log) {
+    if (log || listened) {
       albumButtons.push(
         <div className='listened-button listened-button-active' onClick={() => handleDelete()}>
-          <img className='listened-icon' src={listened} />
+          <img className='listened-icon' src={listenedIcon} />
         </div>
       )
     }
     else {
       albumButtons.push(
         <div className='listened-button listened-button-inactive' onClick={() => handleInputChange('')}>
-          <img className='listened-icon listened-icon-inactive' src={listened} />
+          <img className='listened-icon listened-icon-inactive' src={listenedIcon} />
         </div>
       )
     }
@@ -159,7 +163,7 @@ const AlbumPage: React.FC = () => {
     const ratingComponents = []
     for (let i = 1; i <= 10; i++) {
       const str = i.toString()
-      if (log && currentRating && i === currentRating) {
+      if (currentRating && i === currentRating) {
         ratingComponents.push(
           <div className='rating-component-active'>
             <h3 className='rating-text-active' onClick={() => handleInputChange('')}>{i}</h3>
@@ -167,7 +171,7 @@ const AlbumPage: React.FC = () => {
       }
       else {
         ratingComponents.push(
-          <div key={i} className='rating-component-inactive'>
+          <div className='rating-component-inactive'>
             <h3 className='rating-text-inactive' onClick={() => handleInputChange(str)}>{i}</h3>
           </div>
         )

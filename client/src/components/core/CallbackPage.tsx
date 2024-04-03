@@ -30,7 +30,8 @@ const CallbackPage: React.FC = () => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': authHeader
-          }
+          },
+          mode: 'cors'
         }
   
         try {

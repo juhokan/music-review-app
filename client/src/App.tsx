@@ -68,7 +68,7 @@ const App: React.FC = () => {
     if (refreshToken) {
       createAxiosResponseInterceptor(refreshToken, setToken)
     }
-  }, [refreshToken])
+  }, [refreshToken, token])
 
 
   const setAndSaveToken = (token: string | null) => {

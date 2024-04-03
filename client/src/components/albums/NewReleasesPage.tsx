@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { TokenContext } from "../../context"
-import { getNewReleases } from "../../api/spotify-api"
+import createAxiosResponseInterceptor, { getNewReleases } from "../../api/spotify-api"
 import Album from "./Album"
 
 interface NewReleasesPageProps {
@@ -10,7 +10,8 @@ interface NewReleasesPageProps {
 const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = React.useState<any[]>([])
-  const { token } = React.useContext(TokenContext)
+  const { token, setToken } = React.useContext(TokenContext)
+  const { refreshToken } = React.useContext(TokenContext)
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -23,6 +24,10 @@ const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
       } catch (error) {
         console.error("Error fetching albums:", error)
       }
+    }
+
+    if (refreshToken) {
+      createAxiosResponseInterceptor(refreshToken, setToken)
     }
 
     fetchAlbums()

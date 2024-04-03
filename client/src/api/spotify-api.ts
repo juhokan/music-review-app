@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { CLIENT_ID } from '../config'
+
 
 export const searchArtists = async (token: string, key: string) => {
   const {data} = await axios.get("https://api.spotify.com/v1/search", {
@@ -15,41 +17,106 @@ export const searchArtists = async (token: string, key: string) => {
 }
 
 export const searchAlbums = async (token: string, key: string) => {
-  const {data} = await axios.get("https://api.spotify.com/v1/search", {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-    params: {
-      q: key,
-      type: "album"
-    }
-  })
-
-  return data.albums.items
+  try {
+    const {data} = await axios.get("https://api.spotify.com/v1/search", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        q: key,
+        type: "album"
+      }
+    })
+  
+    return data.albums.items
+  } catch (error) {
+    console.error("Error searching albums:", error)
+    throw error
+  }
 }
 
 export const getAlbum = async (token: string, id: string) => {
-  const {data} = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-    params: {
-      id: id
-    }
-  })
-  console.log(data)
-  return data
+  try {
+    const {data} = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        id: id
+      }
+    })
+    console.log(data)
+    return data
+  } catch (error) {
+    console.error("Error searching specific album:", error)
+    throw error
+  }
 }
 
 export const getNewReleases = async (token: string, limit: number) => {
-  const {data} = await axios.get(`https://api.spotify.com/v1/browse/new-releases`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-    params: {
-      limit: limit
-    }
-  })
-  console.log(data)
-  return data.albums.items
+  try {
+    const {data} = await axios.get(`https://api.spotify.com/v1/browse/new-releases`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        limit: limit
+      }
+    })
+    console.log(data)
+    return data.albums.items
+  } catch (error) {
+    console.error("Error searching new releases:", error)
+    throw error
+  }
 }
+
+function createAxiosResponseInterceptor(refreshToken: string, setToken: (token: string | null) => void) {
+  const interceptor = axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      // Reject promise if usual error
+      if (error.response.status !== 401) {
+        console.log('Non-401 error occurred:', error)
+        return Promise.reject(error)
+      }
+      
+      console.log('401 error detected, attempting token refresh...')
+
+      axios.interceptors.response.eject(interceptor)
+
+      if (refreshToken) {
+        console.log('Refreshing token...')
+        const url = 'https://accounts.spotify.com/api/token'
+
+        const payload = new URLSearchParams({
+          refresh_token: refreshToken,
+          client_id: CLIENT_ID,
+          grant_type: 'refresh_token'
+        })
+
+        return axios.post(url, payload)
+          .then((response) => {
+            console.log('Token refreshed successfully.')
+            setToken(response.data.access_token)
+            error.response.config.headers["Authorization"] = "Bearer " + response.data.access_token
+            // Retry the initial call, but with the updated token in the headers.
+            // Resolves the promise if successful
+            return axios(error.response.config)
+          })
+          .catch((error2) => {
+            console.error('Error refreshing token:', error2)
+            // Retry failed, clean up and reject the promise
+            setToken(null)
+            return Promise.reject(error2)
+          })
+          .finally(() => {
+            console.log('Re-attaching interceptor after token refresh.')
+            createAxiosResponseInterceptor(refreshToken, setToken)
+          })
+      }
+    }
+  )
+}
+
+export default createAxiosResponseInterceptor

@@ -14,6 +14,7 @@ const AlbumPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const [album, setAlbum] = useState<any>(null)
   const [log, setLog] = useState<any>()
+  const [currentRating, setCurrentRating] = useState<number | undefined>()
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -32,6 +33,7 @@ const AlbumPage: React.FC = () => {
         if (auth && albumId) {
           const l = await userScore(auth.user.id, albumId)
           setLog(l)
+          setCurrentRating(l.attributes.rating)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
@@ -44,7 +46,6 @@ const AlbumPage: React.FC = () => {
   const postNewAlbum = async (id: string, rating: number) => {
     if (auth) {
       await postAlbum(id, auth.user.id, album.images[0].url, album.name, album.artists[0].name, rating)
-      window.location.reload()
     }
     else {
       console.log('no auth')
@@ -55,7 +56,6 @@ const AlbumPage: React.FC = () => {
   const putExistingAlbum = async (rating: number) => {
     if (auth && log) {
       await putAlbum(log.id, rating)
-      window.location.reload()
     }
     else {
       console.log('no auth')
@@ -85,8 +85,11 @@ const AlbumPage: React.FC = () => {
     console.log(input)
     if (albumId) {
       if (log) {
+        setCurrentRating(parseInt(input))
         putExistingAlbum(parseInt(input))
+        
       } else {
+        setCurrentRating(parseInt(input))
         postNewAlbum(albumId, parseInt(input))
       }
     }
@@ -156,7 +159,7 @@ const AlbumPage: React.FC = () => {
     const ratingComponents = []
     for (let i = 1; i <= 10; i++) {
       const str = i.toString()
-      if (log && log.attributes.rating && i === log.attributes.rating) {
+      if (log && currentRating && i === currentRating) {
         ratingComponents.push(
           <div className='rating-component-active'>
             <h3 className='rating-text-active' onClick={() => handleInputChange('')}>{i}</h3>

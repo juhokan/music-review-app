@@ -57,7 +57,7 @@ const UserPage: React.FC = () => {
     fetchStrapiAlbums()
     fetchAlbums()
 
-  }, [auth, profiles])
+  }, [auth, profiles, token])
 
   const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === auth.user.id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())

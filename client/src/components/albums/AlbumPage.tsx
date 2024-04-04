@@ -6,7 +6,7 @@ import { getAlbum } from "../../api/spotify-api.ts"
 import { deleteAlbum, postAlbum, putAlbum, userScore } from "../../api/strapi-api.ts"
 import listenedIcon from "../../assets/icons/listened.svg"
 import spotifyIcon from "../../assets/icons/spotify.svg"
-
+import Tracks from "./Tracks.tsx"
 
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
@@ -16,6 +16,7 @@ const AlbumPage: React.FC = () => {
   const [log, setLog] = useState<any>()
   const [listened, setListened] = useState<any>()
   const [currentRating, setCurrentRating] = useState<number | undefined>()
+
 
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -100,14 +101,8 @@ const AlbumPage: React.FC = () => {
   }
 
 
-  function msToMinSec(ms: number) {
-    const totalSeconds = Math.floor(ms / 1000)
-    const minutes = Math.floor(totalSeconds / 60)
-    const seconds = totalSeconds % 60
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-  }
-
   const albumData = () => {
+
     return (
       <div className='rating-page'>
         <div className='rating-album-data-container'>
@@ -117,13 +112,7 @@ const AlbumPage: React.FC = () => {
           <h4 className='rating-track-info'>Released: {album.release_date.split("-")[0]}</h4>
           <h4 className='rating-track-info'>Label: {album.label}</h4>
           <h3 className='rating-artist-text tracks'>Tracks</h3>
-          {album.tracks.items.map((track: any) => (
-            <div className='rating-track-container'>
-              <h4 className='rating-track-name'>{track.name}</h4>
-              <h4 className='rating-track-title'>({msToMinSec(track.duration_ms)})</h4>
-            </div>
-          ))}
-          
+          {<Tracks album={album}/>}
         </div>
       </div>
     )

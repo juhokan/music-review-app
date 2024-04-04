@@ -57,6 +57,41 @@
   margin-top: 12px !important;
   margin-bottom: 0px !important;
 }
+
+.progress-bar-container {
+  width: 40%;
+  height: 4px;
+  background-color: #333; /* Dark background */
+  overflow: hidden; /* Prevent progress bar overflow */
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: white; /* White progress */
+}
+
+.play-pause-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.play-pause-icon {
+  filter: brightness(50%);
+  transition: transform color 0.3s ease;
+  height: 14px;
+}
+
+.play-pause-icon:hover {
+  cursor: pointer;
+  filter: brightness(100%);
+}
+
+
 .header {
   padding-top: 1rem;
   padding-bottom: 1rem;

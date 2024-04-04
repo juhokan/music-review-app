@@ -8,15 +8,17 @@ import { StrapiProfile } from '../strapi/model.strapi'
 import { getAllStrapiAlbums } from '../api/strapi-api'
 import Album from '../components/albums/Album'
 import { followers, listened } from '../components/data/UserData'
+import { getUsersAlbums } from '../api/spotify-api'
 
 
 
 const UserPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const { profiles } = React.useContext(ProfileContext)
-  const { refreshToken } = React.useContext(TokenContext)
+  const { token, refreshToken } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
+  const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
 
   useEffect(() => {
     
@@ -30,21 +32,34 @@ const UserPage: React.FC = () => {
       })
     }
 
-    const fetchAlbums = async () => {
+    const fetchStrapiAlbums = async () => {
       try {
         const items = await getAllStrapiAlbums()
-        setAlbums(items)
+        setStrapiAlbums(items)
         console.log("User page", items)
       } catch (error) {
         console.error("Error fetching albums:", error)
       }
     }
 
+    const fetchAlbums = async () => {
+      try {
+        if (token) {
+          const items = await getUsersAlbums(token, 10)
+          setAlbums(items)
+          console.log("New release response:", items)
+        }
+      } catch (error) {
+        console.error("Error fetching albums:", error)
+      }
+    }
+
+    fetchStrapiAlbums()
     fetchAlbums()
 
   }, [auth, profiles])
 
-  const filteredAlbums = albums.filter(album => album.attributes.user_id === auth.user.id)
+  const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === auth.user.id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())
 
   const profiledata = () => {
@@ -97,6 +112,26 @@ const UserPage: React.FC = () => {
     )
   }
 
+
+  const usersSavedAlbums = () => {
+    return (
+      <div>
+        <h2 className='new-releases-header'>Saved Albums</h2>
+        <div className='album-card-container'> 
+          {albums.map((album) => (
+            <Album 
+              key={album.album.id} 
+              id={album.album.id} 
+              link={album.album.images[0].url} 
+              name={album.album.name} 
+              artistName={album.album.artists[0].name} 
+              rating={null}/>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const generateRandomString = (length: number) => {
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     let randomString = ''
@@ -120,7 +155,7 @@ const UserPage: React.FC = () => {
 
   const authUrl = () => {
     const state = generateRandomString(16)
-    const scope = 'user-read-private user-read-email'
+    const scope = 'user-read-private user-read-email user-library-read'
   
     const queryParams = new URLSearchParams({
       response_type: 'code',
@@ -142,6 +177,7 @@ const UserPage: React.FC = () => {
           
           
           {recentActivity()}
+          {usersSavedAlbums()}
           {!refreshToken && <Link className='validate-token' to={authUrl()}>Validate Token</Link>}
         </>
       ) : (

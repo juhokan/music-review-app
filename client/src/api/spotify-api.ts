@@ -72,6 +72,24 @@ export const getNewReleases = async (token: string, limit: number) => {
   }
 }
 
+export const getUsersAlbums = async (token: string, limit: number) => {
+  try {
+    const {data} = await axios.get(`https://api.spotify.com/v1/me/albums`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        limit: limit
+      }
+    })
+    console.log(data)
+    return data.items
+  } catch (error) {
+    console.error("Error searching new releases:", error)
+    throw error
+  }
+}
+
 function createAxiosResponseInterceptor(refreshToken: string, setToken: (token: string | null) => void) {
   const interceptor = axios.interceptors.response.use(
     (response) => response,

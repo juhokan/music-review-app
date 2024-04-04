@@ -1,0 +1,19 @@
+# fly.toml app configuration file generated for hifi-app-strapi on 2024-04-04T11:12:47+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'hifi-app-strapi'
+primary_region = 'arn'
+
+
+[build]
+[http_service]
+  internal_port = 1337
+  force_https = true
+  auto_stop_machines = false
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

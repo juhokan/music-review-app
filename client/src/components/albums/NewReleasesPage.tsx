@@ -37,7 +37,7 @@ const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
     <div>
       <div className='album-card-page-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name}/>
+          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name} rating={null}/>
         ))}
       </div>
     </div>

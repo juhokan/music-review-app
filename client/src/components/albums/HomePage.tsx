@@ -2,9 +2,10 @@ import React, { useEffect } from "react"
 import { TokenContext } from "../../context"
 import createAxiosResponseInterceptor, { getNewReleases } from "../../api/spotify-api"
 import Album from "./Album"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AppRoute } from "../../routes"
 import RecentAlbums from "./RecentAlbums"
+import { CLIENT_ID } from "../../config"
 
 interface NewReleaseProps {
   limit: number
@@ -40,15 +41,57 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
     navigate(AppRoute.New)
   }
 
+  const generateRandomString = (length: number) => {
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    let randomString = ''
+  
+    if (window.crypto && window.crypto.getRandomValues) {
+      const values = new Uint32Array(length)
+      window.crypto.getRandomValues(values)
+  
+      for (let i = 0; i < length; i++) {
+        randomString += charset[values[i] % charset.length]
+      }
+    } else {
+      // Fallback for browsers that do not support window.crypto
+      for (let i = 0; i < length; i++) {
+        randomString += charset.charAt(Math.floor(Math.random() * charset.length))
+      }
+    }
+  
+    return randomString
+  }
+
+  const authUrl = () => {
+    const state = generateRandomString(16)
+    const scope = 'user-read-private user-read-email user-library-read'
+  
+    const queryParams = new URLSearchParams({
+      response_type: 'code',
+      client_id: CLIENT_ID,
+      scope: scope,
+      redirect_uri: 'https://hifi-app.fly.dev/callback',
+      state: state
+    })
+  
+    return `https://accounts.spotify.com/authorize?` + queryParams.toString()
+  }
 
   
 
   return (
     <div>
+      {!refreshToken && <Link className='validate-token' to={authUrl()}>Validate Token</Link>}
       <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
       <div className='album-card-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name} rating={null}/>
+          <Album 
+            key={album.id} 
+            id={album.id} 
+            link={album.images[0].url} 
+            name={album.name} 
+            artistName={album.artists[0].name} 
+            rating={null}/>
         ))}
       </div>
       <h2 className='new-releases-header'>Most Recent</h2>

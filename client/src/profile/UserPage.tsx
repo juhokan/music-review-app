@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from 'react-router-dom'
 import { ProfileContext, TokenContext, UserContext } from '../context'
 import React, { useEffect } from 'react'
-import { CLIENT_ID, REDIRECT_URI, VALIDATE_URL } from '../config'
 import { toStrapiUrl } from '../strapi/util.strapi'
 import { StrapiProfile } from '../strapi/model.strapi'
 import { getAllStrapiAlbums } from '../api/strapi-api'
@@ -15,7 +13,7 @@ import { getUsersAlbums } from '../api/spotify-api'
 const UserPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const { profiles } = React.useContext(ProfileContext)
-  const { token, refreshToken } = React.useContext(TokenContext)
+  const { token } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
@@ -132,42 +130,6 @@ const UserPage: React.FC = () => {
     )
   }
 
-  const generateRandomString = (length: number) => {
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    let randomString = ''
-  
-    if (window.crypto && window.crypto.getRandomValues) {
-      const values = new Uint32Array(length)
-      window.crypto.getRandomValues(values)
-  
-      for (let i = 0; i < length; i++) {
-        randomString += charset[values[i] % charset.length]
-      }
-    } else {
-      // Fallback for browsers that do not support window.crypto
-      for (let i = 0; i < length; i++) {
-        randomString += charset.charAt(Math.floor(Math.random() * charset.length))
-      }
-    }
-  
-    return randomString
-  }
-
-  const authUrl = () => {
-    const state = generateRandomString(16)
-    const scope = 'user-read-private user-read-email user-library-read'
-  
-    const queryParams = new URLSearchParams({
-      response_type: 'code',
-      client_id: CLIENT_ID,
-      scope: scope,
-      redirect_uri: REDIRECT_URI,
-      state: state
-    })
-  
-    return VALIDATE_URL + queryParams.toString()
-  }
-
   return (
     <div>
       {current ? (
@@ -178,7 +140,6 @@ const UserPage: React.FC = () => {
           
           {recentActivity()}
           {usersSavedAlbums()}
-          {!refreshToken && <Link className='validate-token' to={authUrl()}>Validate Token</Link>}
         </>
       ) : (
         <h2>No Profile Found</h2>

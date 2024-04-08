@@ -70,7 +70,6 @@ const AlbumPage: React.FC = () => {
     if (auth && log) {
       await deleteAlbum(log.id)
       setLog(null)
-      window.location.reload()
     }
     else {
       console.log('no auth')

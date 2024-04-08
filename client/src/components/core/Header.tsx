@@ -72,7 +72,7 @@ const Header: React.FC = () => {
           )}
         </a>
       ) : (
-        <a href='http://localhost:1337/api/connect/google/'>
+        <a href='https://hifi-app-strapi.fly.dev/api/connect/google/'>
           <h3>Log In</h3>
         </a>
       )

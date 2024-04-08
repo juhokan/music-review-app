@@ -374,7 +374,7 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    album_id: Attribute.String & Attribute.Required & Attribute.Unique;
+    album_id: Attribute.String & Attribute.Required;
     rating: Attribute.Decimal &
       Attribute.SetMinMax<
         {

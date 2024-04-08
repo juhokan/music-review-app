@@ -6,8 +6,10 @@ export const getAllStrapiAlbums = async () => {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'http://localhost:1337/api/albums',
-      headers: {}
+      url: 'https://hifi-app-strapi.fly.dev/api/albums',
+      headers: { 
+        'Content-Type': 'application/json'
+      }
     }
 
     const response = await axios.request(config)
@@ -20,7 +22,7 @@ export const getAllStrapiAlbums = async () => {
 }
 
 export const getStrapiAlbum = async (id: number) => {
-  const {data} = await axios.get(`http://localhost:1337/api/albums/${id}`, {
+  const {data} = await axios.get(`https://hifi-app-strapi.fly.dev/albums/${id}`, {
     params: {}
   })
   console.log(data)
@@ -44,7 +46,7 @@ export const postAlbum = async (
   const config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'http://localhost:1337/api/albums/',
+    url: 'https://hifi-app-strapi.fly.dev/api/albums/',
     headers: { 
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${STRAPI_TOKEN}`
@@ -72,9 +74,10 @@ export const putAlbum = async (id: number, rating: number) => {
   const config = {
     method: 'put',
     maxBodyLength: Infinity,
-    url: `http://localhost:1337/api/albums/${id}`,
+    url: `https://hifi-app-strapi.fly.dev/api/albums/${id}`,
     headers: { 
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
     },
     data : data
   }
@@ -94,8 +97,10 @@ export const deleteAlbum = async (id: number) => {
   const config = {
     method: 'delete',
     maxBodyLength: Infinity,
-    url: `http://localhost:1337/api/albums/${id}`,
-    headers: { }
+    url: `https://hifi-app-strapi.fly.dev/api/albums/${id}`,
+    headers: { 
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
+    }
   }
   
   axios.request(config)
@@ -113,7 +118,7 @@ export const userScore = async (id: number, album: string) => {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'http://localhost:1337/api/albums',
+      url: 'https://hifi-app-strapi.fly.dev/api/albums',
       headers: {}
     }
     const response = await axios.request(config)

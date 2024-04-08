@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from 'react-router-dom'
 import { AppRoute } from "../../routes"
-import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "../../config"
+import { CLIENT_ID, CLIENT_SECRET } from "../../config"
 import axios from "axios"
 
 const CallbackPage: React.FC = () => {
@@ -19,7 +19,7 @@ const CallbackPage: React.FC = () => {
         const authHeader = `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
         const authData = new URLSearchParams({
           code: code,
-          redirect_uri: REDIRECT_URI,
+          redirect_uri: 'https://hifi-app.fly.dev/callback',
           grant_type: 'authorization_code'
         }).toString()
   

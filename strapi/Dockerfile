@@ -25,3 +25,4 @@ ENV PATH /opt/node_modules/.bin:$PATH
 COPY --from=build /opt/app ./
 EXPOSE 1337
 CMD ["npm", "start"]
+

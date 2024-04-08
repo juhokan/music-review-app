@@ -175,7 +175,7 @@ const AlbumPage: React.FC = () => {
     <div className='album-page-card'>
       {album && album.images && album.images.length > 0 && (
         <div>
-          <img width={"600px"} src={album.images[0].url} alt='' />
+          <img className='album-page-cover' src={album.images[0].url} alt='' />
           {rating()}
           {albumData()}
         </div>

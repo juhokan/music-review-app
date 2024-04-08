@@ -5,6 +5,7 @@ import { ProfileContext, SearchContext, UserContext } from "../../context"
 import { StrapiProfile } from "../../strapi/model.strapi"
 import { toStrapiUrl } from "../../strapi/util.strapi"
 import { useLocation, useNavigate } from 'react-router-dom'
+import searchIcon from "../../assets/icons/search.svg"
 
 
 const Header: React.FC = () => {
@@ -15,18 +16,33 @@ const Header: React.FC = () => {
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const [isMobile, setMobile] = React.useState(false)
+
+  const MAX_WIDTH = 768
+
+  const isSearchActive = () => {
+    setMobile(window.innerWidth <= MAX_WIDTH)
+  }
   
 
   useEffect(() => {
+
+    isSearchActive()
+    window.addEventListener('resize', isSearchActive)
     
     if (profiles && auth) {
       Object.values(profiles).forEach((profile) => {
         if (profile.attributes.user_id === auth.user.id) {
           setCurrent(profile)
-          return // exit loop early once a matching profile is found
+          return
         }
       })
     }
+
+    return () => {
+      window.removeEventListener('resize', isSearchActive)
+    }
+
   }, [auth, profiles])
 
 
@@ -50,11 +66,22 @@ const Header: React.FC = () => {
   const headerLinks = () => {
     return (
       <div className='header-link-container'>
-        <div className='search-container'>
-          {pathname !== AppRoute.Search && <form onSubmit={handleSubmit}>
-            <input type='text' className='search-hover' />
-          </form>}
-        </div>
+        {isMobile ? (
+          pathname !== AppRoute.Search && (
+            <a href={AppRoute.Search}>
+              <img src={searchIcon} height='16px' />
+            </a>
+          )
+        ) : (
+          <div className='search-container'>
+            {pathname !== AppRoute.Search && (
+              <form onSubmit={handleSubmit}>
+                <input type='text' className='search-hover' />
+              </form>
+            )}
+          </div>
+        )}
+
         {pathname !== AppRoute.Profile && profileLink()}
       </div>
     )

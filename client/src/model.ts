@@ -13,3 +13,10 @@ export interface ReactCssProps {
   readonly className?: string
   readonly style?: React.CSSProperties
 }
+
+export enum AlbumSort {
+  Newest = 'new',
+  Oldest = 'old',
+  Highest = 'high',
+  Lowest = 'low'
+}

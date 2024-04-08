@@ -10,6 +10,7 @@ import Header from './Header'
 import { SearchContext, UserContext } from '../../context'
 import CallbackPage from './CallbackPage'
 import LoginPage from '../../profile/LoginPage'
+import RatedAlbums from '../albums/RatedAlbums'
 
 const AppContainer: React.FC = () => {
   const { input } = React.useContext(SearchContext)
@@ -41,14 +42,13 @@ const AppContainer: React.FC = () => {
 
           <Route path={AppRoute.Profile}>
             <Route index element={auth ? (<UserPage/>) : (<LoginPage/>)}/>
+            <Route path={AppRoute.UsersAlbums} element={<RatedAlbums />} />
           </Route>
 
           <Route path={AppRoute.Callback}>
             <Route index element={<CallbackPage/>}/>
           </Route>
-
-
-
+          
         </Routes>
       </div>
     </Router>

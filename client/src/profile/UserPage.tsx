@@ -8,6 +8,7 @@ import Album from '../components/albums/Album'
 import { followers, listened } from '../components/data/UserData'
 import { getUsersAlbums } from '../api/spotify-api'
 import { AppRoute } from '../routes'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -19,6 +20,7 @@ const UserPage: React.FC = () => {
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
+  const navigate = useNavigate()
 
   const TOKEN_KEY = 'token'
   const AUTH_TOKEN = 'auth'
@@ -105,11 +107,14 @@ const UserPage: React.FC = () => {
     )
   }
   
+  const handleHeaderClick = () => {
+    navigate(AppRoute.UsersAlbums)
+  }
 
   const recentActivity = () => {
     return (
       <div>
-        <h2 className='new-releases-header'>Recent Activity</h2>
+        <h2 onClick={handleHeaderClick} className='new-releases-header'>Recent Activity</h2>
         <div className='album-card-container'> 
           {filteredAlbums.map((album) => (
             <Album 

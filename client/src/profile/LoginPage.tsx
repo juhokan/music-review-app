@@ -32,36 +32,31 @@ const LoginPage: React.FC = () => {
 
   return (
     <>
-      <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
-          <span>
-            <i></i>
-          </span>
-          <span>
-            <input
-              type='text'
-              id='username'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label htmlFor='username'>Username</label>
-          </span>
-        </div>
+        <div className='login-container'>
+          <div className='login-input-container'>
+            <h3 className='login-input-text'>Username</h3>
+            <span>
+              <input className='login-input'
+                type='text'
+                id='username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </span>
+          </div>
 
-        <div>
-          <span>
-            <i></i>
-          </span>
-          <span>
-            <input
-              type='password'
-              id='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <label htmlFor='password'>Password</label>
-          </span>
+          <div className='login-input-container'>
+            <h3 className='login-input-text'>Password</h3>
+            <span>
+              <input className='login-input'
+                type='password'
+                id='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </span>
+          </div>
         </div>
 
         <div>

@@ -28,7 +28,9 @@ const AlbumPage: React.FC = () => {
 
 
   useEffect(() => {
-    setId(parseJwt(auth).id)
+    if (auth) {
+      setId(parseJwt(auth).id)
+    }
 
     const fetchAlbum = async () => {
       try {

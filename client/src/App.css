@@ -135,6 +135,41 @@
   right: 32px;
 }
 
+.login-container {
+  margin: 0 auto !important;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  max-width: 600px;
+}
+
+.login-input {
+  background-color: black !important;
+  padding-left: 10px;
+  border: 1px solid;
+  border-color: transparent !important;
+  border-radius: 32px;
+  height: 32px;
+  color: white;
+  border: 1px solid #ccc !important;
+  width: 0vw;
+  max-width: 587px;
+  width: 74vw;
+}
+
+.login-input:focus-visible {
+  border: 1px solid #ccc !important;
+  outline: transparent !important;
+}
+
+.login-input-container {
+  text-align: left;
+}
+
+.login-input-text {
+  margin: 16px;
+}
+
 ::-webkit-input-placeholder {
   /* WebKit browsers */
    color: transparent;

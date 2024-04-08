@@ -7,17 +7,22 @@ import { getAllStrapiAlbums } from '../api/strapi-api'
 import Album from '../components/albums/Album'
 import { followers, listened } from '../components/data/UserData'
 import { getUsersAlbums } from '../api/spotify-api'
+import { AppRoute } from '../routes'
 
 
 
 const UserPage: React.FC = () => {
-  const { auth } = React.useContext(UserContext)
+  const { auth, setAuth } = React.useContext(UserContext)
   const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
-  const { token } = React.useContext(TokenContext)
+  const { token, setToken, setRefreshToken } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
+
+  const TOKEN_KEY = 'token'
+  const AUTH_TOKEN = 'auth'
+  const REFRESH_TOKEN_KEY = 'refresh'
 
   const parseJwt = (token: string) => {
     try {
@@ -120,40 +125,55 @@ const UserPage: React.FC = () => {
     )
   }
 
-
+  const handleLogOut = () => {
+    setAuth(null)
+    setToken(null)
+    setRefreshToken(null)
+    window.localStorage.removeItem(AUTH_TOKEN)
+    window.localStorage.removeItem(REFRESH_TOKEN_KEY)
+    window.localStorage.removeItem(TOKEN_KEY)
+  }
   const usersSavedAlbums = () => {
     return (
-      <div>
-        <h2 className='new-releases-header'>Saved Albums</h2>
-        <div className='album-card-container'> 
-          {albums.map((album) => (
-            <Album 
-              key={album.album.id} 
-              id={album.album.id} 
-              link={album.album.images[0].url} 
-              name={album.album.name} 
-              artistName={album.album.artists[0].name} 
-              rating={null}/>
-          ))}
-        </div>
-      </div>
+      <>
+        {albums.length > 0 && (
+          <div>
+            <h2 className='new-releases-header'>Saved Albums</h2>
+            <div className='album-card-container'> 
+              {albums.map((album) => (
+                <Album 
+                  key={album.album.id} 
+                  id={album.album.id} 
+                  link={album.album.images[0].url} 
+                  name={album.album.name} 
+                  artistName={album.album.artists[0].name} 
+                  rating={null}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </>
     )
   }
+  
 
   return (
     <div>
-      {current ? (
-        <>
-          
-          {profiledata()}
-          
-          
-          {recentActivity()}
-          {usersSavedAlbums()}
-        </>
-      ) : (
-        <h2>No Profile Found</h2>
-      )}
+      <div>
+        {current ? (
+          <>
+            {profiledata()}
+            {recentActivity()}
+            {usersSavedAlbums()}
+          </>
+        ) : (
+          <h2>No Profile Found</h2>
+        )}
+      </div>
+      <a href={AppRoute.Home} onClick={handleLogOut}>
+        <h3>Log Out</h3>
+      </a>
     </div>
   )
 }

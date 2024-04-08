@@ -5,34 +5,55 @@ import { ProfileContext, SearchContext, TokenContext, UserContext } from './cont
 import AppContainer from './components/core/AppContainer'
 import { StrapiProfile } from './strapi/model.strapi'
 import strapi from './strapi/client.strapi'
+import createAxiosResponseInterceptor from './api/spotify-api'
 
 const TOKEN_KEY = 'token'
 const AUTH_TOKEN = 'auth'
+const REFRESH_TOKEN_KEY = 'refresh'
 
 const App: React.FC = () => {
   const [token, setToken] = React.useState<string | null>(null)
+  const [refreshToken, setRefreshToken] = React.useState<string | null>(null)
+  const [expiresAt, setExpiresAt] = React.useState<string | null>(null)
   const [auth, setAuth] = React.useState<any | null>(null)
   const [profiles, setProfiles] = React.useState<StrapiProfile[] | null>(null)
   const [input, setInput] = React.useState<string | null>(null)
 
 
   const initToken = () => {
-    const h = window.location.hash
-    const t = window.localStorage.getItem("token")
-    const s = h.substring(1).split("&").find(e => e.startsWith("access_token"))
-    let tval
+    const hash = window.location.hash
+    const currentToken = window.localStorage.getItem(TOKEN_KEY)
+    const currentRefresh = window.localStorage.getItem(REFRESH_TOKEN_KEY)
 
-    if ( h && s !== undefined) {
-      tval = s.split("=")[1]
-      console.log(tval)
+    const newTokenStr = hash.substring(1).split("&").find(e => e.startsWith("access_token"))
+    const newRefreshStr = hash.substring(1).split("&").find(e => e.startsWith("refresh_token"))
+    const newExpiresInStr = hash.substring(1).split("&").find(e => e.startsWith("expires_in"))
+
+    if ( hash && newExpiresInStr && newTokenStr && newRefreshStr) {
+      const newToken = newTokenStr.split("=")[1]
+      const newRefresh = newRefreshStr.split("=")[1]
+      const newExpiresIn = newExpiresInStr.split("=")[1]
+      
+      console.log(newToken)
+      console.log(newRefresh)
+      console.log(newExpiresIn)
+
       window.location.hash = ""
-      if (tval !== t) {
+
+      if (newToken !== currentToken) {
         window.localStorage.removeItem(TOKEN_KEY)
-        window.localStorage.setItem(TOKEN_KEY, tval)
+        window.localStorage.setItem(TOKEN_KEY, newToken)
+      }
+
+      if (newRefresh !== currentRefresh) {
+        window.localStorage.removeItem(REFRESH_TOKEN_KEY)
+        window.localStorage.setItem(REFRESH_TOKEN_KEY, newRefresh)
       }
     }
+    
+    setToken(currentToken)
+    setRefreshToken(currentRefresh)
 
-    setToken(t)
   }
 
   const fetchProfiles = async () => {
@@ -44,7 +65,10 @@ const App: React.FC = () => {
     initToken()
     initAuth()
     fetchProfiles()
-  }, [])
+    if (refreshToken) {
+      createAxiosResponseInterceptor(refreshToken, setToken)
+    }
+  }, [refreshToken, token])
 
 
   const setAndSaveToken = (token: string | null) => {
@@ -56,6 +80,15 @@ const App: React.FC = () => {
     initToken()
   }
 
+  const setAndSaveRefreshToken = (refreshToken: string | null) => {
+    if (refreshToken) {
+      window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
+    } else {
+      window.localStorage.removeItem(REFRESH_TOKEN_KEY)
+    }
+    initToken()
+  }
+
   const initAuth = () => {
     const t = window.localStorage.getItem(AUTH_TOKEN)
     if (t) {
@@ -63,14 +96,17 @@ const App: React.FC = () => {
     }
   }
 
-
-
-
+  
   return (
     <>
       <UserContext.Provider value={{ auth, setAuth }}>
         <ProfileContext.Provider value={{ profiles }}>
-          <TokenContext.Provider value={{token, setToken: setAndSaveToken}}>
+          <TokenContext.Provider 
+            value={{
+              token, setToken: setAndSaveToken, 
+              expiresAt, setExpiresAt, 
+              refreshToken, setRefreshToken: setAndSaveRefreshToken
+            }}>
             <SearchContext.Provider value={{ input, setInput }}>
               <AppContainer/>
             </SearchContext.Provider>

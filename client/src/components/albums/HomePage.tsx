@@ -1,10 +1,11 @@
 import React, { useEffect } from "react"
 import { TokenContext } from "../../context"
-import { getNewReleases } from "../../api/spotify-api"
+import createAxiosResponseInterceptor, { getNewReleases } from "../../api/spotify-api"
 import Album from "./Album"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AppRoute } from "../../routes"
 import RecentAlbums from "./RecentAlbums"
+import { CLIENT_ID } from "../../config"
 
 interface NewReleaseProps {
   limit: number
@@ -13,7 +14,8 @@ interface NewReleaseProps {
 const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = React.useState<any[]>([])
-  const { token } = React.useContext(TokenContext)
+  const { token, setToken } = React.useContext(TokenContext)
+  const { refreshToken } = React.useContext(TokenContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -22,30 +24,74 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
         if (token) {
           const items = await getNewReleases(token, limit)
           setAlbums(items)
-          console.log("New release response:", items)
         }
       } catch (error) {
         console.error("Error fetching albums:", error)
       }
     }
-
+    
+    if (refreshToken) {
+      createAxiosResponseInterceptor(refreshToken, setToken)
+    }
     fetchAlbums()
-  }, [limit, token])
+  }, [limit, refreshToken, token])
 
   
   const handleHeaderClickNew = () => {
     navigate(AppRoute.New)
   }
 
+  const generateRandomString = (length: number) => {
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    let randomString = ''
+  
+    if (window.crypto && window.crypto.getRandomValues) {
+      const values = new Uint32Array(length)
+      window.crypto.getRandomValues(values)
+  
+      for (let i = 0; i < length; i++) {
+        randomString += charset[values[i] % charset.length]
+      }
+    } else {
+      // Fallback for browsers that do not support window.crypto
+      for (let i = 0; i < length; i++) {
+        randomString += charset.charAt(Math.floor(Math.random() * charset.length))
+      }
+    }
+  
+    return randomString
+  }
+
+  const authUrl = () => {
+    const state = generateRandomString(16)
+    const scope = 'user-read-private user-read-email user-library-read'
+  
+    const queryParams = new URLSearchParams({
+      response_type: 'code',
+      client_id: CLIENT_ID,
+      scope: scope,
+      redirect_uri: 'https://hifi-app.fly.dev/callback',
+      state: state
+    })
+  
+    return `https://accounts.spotify.com/authorize?` + queryParams.toString()
+  }
 
   
 
   return (
     <div>
-     <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
+      {!refreshToken && <Link className='validate-token' to={authUrl()}>Validate Token</Link>}
+      <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
       <div className='album-card-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name} rating={null}/>
+          <Album 
+            key={album.id} 
+            id={album.id} 
+            link={album.images[0].url} 
+            name={album.name} 
+            artistName={album.artists[0].name} 
+            rating={null}/>
         ))}
       </div>
       <h2 className='new-releases-header'>Most Recent</h2>

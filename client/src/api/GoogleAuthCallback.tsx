@@ -17,7 +17,7 @@ const GoogleAuthCallback: React.FC = () => {
   
     axios({
       method: 'GET',
-      url: `http://localhost:1337/api/auth/google/callback?${search}`
+      url: `https://hifi-app.fly.dev/api/connect/google/callback?${search}`
     })
       .then((res) => res.data)
       .then((data) => {

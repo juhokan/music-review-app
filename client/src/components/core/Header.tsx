@@ -21,7 +21,6 @@ const Header: React.FC = () => {
     
     if (profiles && auth) {
       Object.values(profiles).forEach((profile) => {
-        console.log(profile)
         if (profile.attributes.user_id === auth.user.id) {
           setCurrent(profile)
           return // exit loop early once a matching profile is found
@@ -73,7 +72,7 @@ const Header: React.FC = () => {
           )}
         </a>
       ) : (
-        <a href='http://localhost:1337/api/connect/google/'>
+        <a href='https://hifi-app-strapi.fly.dev/api/connect/google/'>
           <h3>Log In</h3>
         </a>
       )

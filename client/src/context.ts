@@ -13,7 +13,7 @@ interface TokenCtx {
 }
 
 interface UserCtx extends AppUser {
-  readonly setAuth: (auth: any | null) => void
+  readonly setAuth: (auth: string | null) => void
 }
 
 interface ProfileCtx {

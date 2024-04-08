@@ -92,7 +92,7 @@ const App: React.FC = () => {
   const initAuth = () => {
     const t = window.localStorage.getItem(AUTH_TOKEN)
     if (t) {
-      setAuth(JSON.parse(t))
+      setAuth(t)
     }
   }
 

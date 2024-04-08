@@ -10,6 +10,7 @@ import Tracks from "./Tracks.tsx"
 
 const AlbumPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>()
+  const [id, setId] = React.useState<number>()
   const { token } = React.useContext(TokenContext)
   const { auth } = React.useContext(UserContext)
   const [album, setAlbum] = useState<any>(null)
@@ -17,8 +18,18 @@ const AlbumPage: React.FC = () => {
   const [listened, setListened] = useState<any>()
   const [currentRating, setCurrentRating] = useState<number | undefined>()
 
+  const parseJwt = (token: string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]))
+    } catch (e) {
+      return null
+    }
+  }
+
 
   useEffect(() => {
+    setId(parseJwt(auth).id)
+
     const fetchAlbum = async () => {
       try {
         if (token && albumId) {
@@ -32,8 +43,8 @@ const AlbumPage: React.FC = () => {
 
     const fetchScore = async () => {
       try {
-        if (auth && albumId) {
-          const l = await userScore(auth.user.id, albumId)
+        if (id && albumId) {
+          const l = await userScore(id, albumId)
           setLog(l)
           setCurrentRating(l.attributes.rating)
         }
@@ -43,11 +54,11 @@ const AlbumPage: React.FC = () => {
     }
     fetchScore()
     fetchAlbum()
-  }, [token, albumId, auth, listened])
+  }, [token, albumId, auth, listened, id])
 
-  const postNewAlbum = async (id: string, rating: number) => {
-    if (auth) {
-      await postAlbum(id, auth.user.id, album.images[0].url, album.name, album.artists[0].name, rating)
+  const postNewAlbum = async (aId: string, rating: number) => {
+    if (id) {
+      await postAlbum(aId, id, album.images[0].url, album.name, album.artists[0].name, rating)
     }
     else {
       console.log('no auth')

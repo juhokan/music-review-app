@@ -11,6 +11,7 @@ import searchIcon from "../../assets/icons/search.svg"
 const Header: React.FC = () => {
 
   const { auth } = React.useContext(UserContext)
+  const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
   const { setInput } = React.useContext(SearchContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
@@ -23,6 +24,14 @@ const Header: React.FC = () => {
   const isSearchActive = () => {
     setMobile(window.innerWidth <= MAX_WIDTH)
   }
+
+  const parseJwt = (token: string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]))
+    } catch (e) {
+      return null
+    }
+  }
   
 
   useEffect(() => {
@@ -31,8 +40,9 @@ const Header: React.FC = () => {
     window.addEventListener('resize', isSearchActive)
     
     if (profiles && auth) {
+      setId(parseJwt(auth).id)
       Object.values(profiles).forEach((profile) => {
-        if (profile.attributes.user_id === auth.user.id) {
+        if (profile.attributes.user_id === id) {
           setCurrent(profile)
           return
         }
@@ -43,7 +53,7 @@ const Header: React.FC = () => {
       window.removeEventListener('resize', isSearchActive)
     }
 
-  }, [auth, profiles])
+  }, [auth, profiles, id])
 
 
   const headerImage = () => {
@@ -99,7 +109,7 @@ const Header: React.FC = () => {
           )}
         </a>
       ) : (
-        <a href='https://hifi-app-strapi.fly.dev/api/connect/google/'>
+        <a href={AppRoute.Profile}>
           <h3>Log In</h3>
         </a>
       )

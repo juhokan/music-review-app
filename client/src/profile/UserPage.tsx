@@ -12,18 +12,28 @@ import { getUsersAlbums } from '../api/spotify-api'
 
 const UserPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
+  const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
   const { token } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
 
+  const parseJwt = (token: string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]))
+    } catch (e) {
+      return null
+    }
+  }
+
   useEffect(() => {
     
     if (profiles && auth) {
+      setId(parseJwt(auth).id)
+      console.log('id: ', id)
       Object.values(profiles).forEach((profile) => {
-        console.log(profile)
-        if (profile.attributes.user_id === auth.user.id) {
+        if (profile.attributes.user_id === id) {
           setCurrent(profile)
           return
         }
@@ -55,9 +65,9 @@ const UserPage: React.FC = () => {
     fetchStrapiAlbums()
     fetchAlbums()
 
-  }, [auth, profiles, token])
+  }, [auth, id, profiles, token])
 
-  const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === auth.user.id)
+  const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())
 
   const profiledata = () => {

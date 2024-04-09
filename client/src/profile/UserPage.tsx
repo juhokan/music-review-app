@@ -9,6 +9,7 @@ import { followers, listened } from '../components/data/UserData'
 import { getUsersAlbums } from '../api/spotify-api'
 import { AppRoute } from '../routes'
 import { useNavigate } from 'react-router-dom'
+import pageLinkImage from '../assets/icons/pageLink.svg'
 
 
 
@@ -114,7 +115,10 @@ const UserPage: React.FC = () => {
   const recentActivity = () => {
     return (
       <div>
-        <h2 onClick={handleHeaderClick} className='new-releases-header'>Recent Activity</h2>
+        <div className='new-releases-header' onClick={handleHeaderClick}>
+          <h2 className='new-releases-header-text'>Recent Activity</h2>
+          <img className='new-releases-image' src={pageLinkImage} />
+        </div>
         <div className='album-card-container'> 
           {filteredAlbums.map((album) => (
             <Album 

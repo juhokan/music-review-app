@@ -108,8 +108,9 @@
   top: 0;
   width: 100%;
   box-sizing: border-box;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 1000;
+  backdrop-filter: blur(15px);
 }
 
 .header-image {
@@ -229,7 +230,7 @@
   background: url('/src/assets/icons/search.svg') no-repeat left;
   background-size: 15px;
   background-position: 10px 9px;
-  background-color: black !important;
+  background-color: transparent !important;
   border: 1px solid;
   border-color: transparent !important;
   border-radius: 32px;
@@ -312,6 +313,12 @@
   }
   .rating-text-active {
     font-size: 20px;
+  }
+
+  .new-releases-image {
+    height: 32px;
+    padding-top: 4px !important;
+    padding-inline: 16px !important;
   }
 }
 
@@ -465,6 +472,7 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
+
 .sort-container {
   max-width: 1000px;
   width: 85vw;
@@ -483,12 +491,26 @@
   margin-right: 12px;
 }
 
+.sort-select {
+  margin-right: 8px;
+}
+
+.new-releases-image {
+  max-height: 40px;
+  padding-top: 8px;
+  padding-inline: 24px;
+}
 
 .new-releases-header {
+  align-items: center;
+  display: flex;
   text-align: left;
-  margin: 0;
   padding-left: 2rem;
   cursor: pointer;
+}
+
+.new-releases-header-text {
+  margin: 0;
 }
 
 .new-release-link-card {

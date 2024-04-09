@@ -32,6 +32,7 @@ h4 {
 }
 
 select {
+  cursor: pointer;
   display: flex;
   font-family: inherit;
   font-size: 16px;

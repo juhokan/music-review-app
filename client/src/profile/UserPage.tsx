@@ -5,11 +5,11 @@ import { toStrapiUrl } from '../strapi/util.strapi'
 import { StrapiProfile } from '../strapi/model.strapi'
 import { getAllStrapiAlbums } from '../api/strapi-api'
 import Album from '../components/albums/Album'
-import { followers, listened } from '../components/data/UserData'
 import { getUsersAlbums } from '../api/spotify-api'
 import { AppRoute } from '../routes'
 import { useNavigate } from 'react-router-dom'
 import pageLinkImage from '../assets/icons/pageLink.svg'
+import AlbumRatingData from '../components/data/AlbumRatingData'
 
 
 
@@ -78,6 +78,7 @@ const UserPage: React.FC = () => {
   const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())
 
+
   const profiledata = () => {
     return (
       <div className='profile-info'>
@@ -89,19 +90,7 @@ const UserPage: React.FC = () => {
                 src={toStrapiUrl(current.attributes.profile_image.data.attributes.url)}
               />
             )}
-            <div className='profile-data-container'>
-              <h2 className='profile-name'>{current.attributes.display_name}</h2>
-              <div className='profile-data-fields-container'>
-                <div>
-                  <h3 className='profile-data-text'>{listened(filteredAlbums)}</h3>
-                  <h4 className='profile-data-label'>Listened</h4>
-                </div>
-                <div>
-                  <h3 className='profile-data-text'>{followers()}</h3>
-                  <h4 className='profile-data-label'>Followers</h4>
-                </div>
-              </div>
-            </div>
+            <h2 style={{padding: '16px'}}>{current.attributes.display_name}</h2>    
           </div>
         )}
       </div>
@@ -147,7 +136,7 @@ const UserPage: React.FC = () => {
       <>
         {albums.length > 0 && (
           <div>
-            <h2 className='new-releases-header'>Saved Albums</h2>
+            <h2 className='new-releases-header new-releases-header-text'>Saved Albums</h2>
             <div className='album-card-container'> 
               {albums.map((album) => (
                 <Album 
@@ -173,6 +162,7 @@ const UserPage: React.FC = () => {
         {current ? (
           <>
             {profiledata()}
+            {<AlbumRatingData albums={filteredAlbums}/>}
             {recentActivity()}
             {usersSavedAlbums()}
           </>

@@ -185,6 +185,7 @@
 
 .profile-container {
   display: flex;
+  align-items: center;
 }
 
 .profile-data-container {
@@ -402,6 +403,44 @@
 .spotify-icon {
   height: 48px;
   filter: brightness(75%);
+}
+
+.rating-bar {
+  margin: 1px;
+  background-color: #bebebe;
+  width: 20px;
+}
+
+.rating-bar:hover {
+  background-color: #ffffff;
+}
+
+.rating-bar-data-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 282px;
+  text-align: left;
+  margin: 0 auto;
+  padding: 24px;
+}
+.rating-bar-data-header {
+  display: flex;
+  padding: 4px;
+}
+
+.rating-bar-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.rating-bar-number {
+  padding-top: 8px;
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+  padding-inline: 8px;
 }
 
 .rating-track-name {

@@ -90,7 +90,10 @@ const UserPage: React.FC = () => {
                 src={toStrapiUrl(current.attributes.profile_image.data.attributes.url)}
               />
             )}
-            <h2 style={{padding: '16px'}}>{current.attributes.display_name}</h2>    
+            <div>
+              <h2 className='profile-name' style={{padding: '16px'}}>{current.attributes.display_name}</h2>    
+              <AlbumRatingData albums={filteredAlbums}/>
+            </div>
           </div>
         )}
       </div>
@@ -162,7 +165,6 @@ const UserPage: React.FC = () => {
         {current ? (
           <>
             {profiledata()}
-            {<AlbumRatingData albums={filteredAlbums}/>}
             {recentActivity()}
             {usersSavedAlbums()}
           </>

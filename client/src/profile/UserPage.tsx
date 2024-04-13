@@ -9,6 +9,7 @@ import { getUsersAlbums } from '../api/spotify-api'
 import { AppRoute } from '../routes'
 import { useNavigate } from 'react-router-dom'
 import pageLinkImage from '../assets/icons/pageLink.svg'
+import settingsIcon from '../assets/icons/settings.svg'
 import AlbumRatingData from '../components/data/AlbumRatingData'
 
 
@@ -22,6 +23,7 @@ const UserPage: React.FC = () => {
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
   const navigate = useNavigate()
+  const [showSettings, setShowSettings] = React.useState(false)
 
   const TOKEN_KEY = 'token'
   const AUTH_TOKEN = 'auth'
@@ -77,6 +79,7 @@ const UserPage: React.FC = () => {
 
   const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())
+  const favouriteAlbums = filteredAlbums.filter(album => album.attributes.favourite === true)
 
 
   const profiledata = () => {
@@ -116,15 +119,65 @@ const UserPage: React.FC = () => {
           <img className='new-releases-image' src={pageLinkImage} />
         </div>
         <div className='album-card-container'> 
-          {filteredAlbums.map((album) => (
-            <Album 
-              key={album.id} 
-              id={album.attributes.album_id} 
-              link={album.attributes.image_link} 
-              name={album.attributes.title} 
-              artistName={album.attributes.artist} 
-              rating={album.attributes.rating}/>
-          ))}
+          {filteredAlbums.length > 10 ? (
+            filteredAlbums.slice(0, 10).map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          ) : (
+            filteredAlbums.map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  const favourites = () => {
+    return (
+      <div>
+        <div className='new-releases-header'>
+          <h2 className='new-releases-header-text'>Favourites</h2>
+          <img className='new-releases-image' src={pageLinkImage} />
+        </div>
+        <div className='album-card-container'> 
+          {favouriteAlbums.length > 10 ? (
+            favouriteAlbums.slice(0, 10).map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          ) : (
+            favouriteAlbums.map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          )}
         </div>
       </div>
     )
@@ -138,6 +191,19 @@ const UserPage: React.FC = () => {
     window.localStorage.removeItem(REFRESH_TOKEN_KEY)
     window.localStorage.removeItem(TOKEN_KEY)
   }
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings)
+  }
+
+  const settingsMenu = () => {
+    return (
+      <div className='settings-menu'>
+        <button onClick={handleLogOut}>Log Out</button>
+      </div>
+    )
+  }
+
   const usersSavedAlbums = () => {
     return (
       <>
@@ -173,15 +239,18 @@ const UserPage: React.FC = () => {
           <>
             {profiledata()}
             {recentActivity()}
+            {favourites()}
             {usersSavedAlbums()}
           </>
         ) : (
           <h2>No Profile Found</h2>
         )}
+        <div className='profile-settings-container'>
+          <img className='profile-settings-icon' height='20px' src={settingsIcon} onClick={toggleSettings}></img>
+          {showSettings && settingsMenu()}
+        </div>
       </div>
-      <a href={AppRoute.Home} onClick={handleLogOut}>
-        <h3>Log Out</h3>
-      </a>
+      
     </div>
   )
 }

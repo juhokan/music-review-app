@@ -387,6 +387,9 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
     image_link: Attribute.String & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     artist: Attribute.String & Attribute.Required;
+    favourite: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -397,6 +400,40 @@ export interface ApiAlbumAlbum extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::album.album',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUpNextUpNext extends Schema.CollectionType {
+  collectionName: 'up_nexts';
+  info: {
+    singularName: 'up-next';
+    pluralName: 'up-nexts';
+    displayName: 'UpNext';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    album_id: Attribute.String & Attribute.Required;
+    user_id: Attribute.Integer & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
+    image_link: Attribute.String & Attribute.Required;
+    artist: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::up-next.up-next',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::up-next.up-next',
       'oneToOne',
       'admin::user'
     > &
@@ -872,6 +909,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::album.album': ApiAlbumAlbum;
+      'api::up-next.up-next': ApiUpNextUpNext;
       'api::user-profile.user-profile': ApiUserProfileUserProfile;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

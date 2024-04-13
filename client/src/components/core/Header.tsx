@@ -93,6 +93,7 @@ const Header: React.FC = () => {
         )}
 
         {pathname !== AppRoute.Profile && profileLink()}
+
       </div>
     )
   }

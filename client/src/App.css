@@ -219,7 +219,6 @@
   margin: 0;
 }
 
-
 .profile-image {
   height: 220px;
   width: 220px;
@@ -229,6 +228,15 @@
 .profile-name {
   margin: 0;
   padding: 0px !important;
+}
+
+.profile-settings-container {
+  text-align: end;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 100px;
+  margin-right: 35px;
 }
 
 @media (max-width: 768px) {
@@ -246,6 +254,10 @@
     margin: 0;
     padding-top: 1rem !important;
     font-size: 50px !important;
+  }
+
+  .profile-settings-container {
+    margin-right: 22px;
   }
 }
 
@@ -362,12 +374,11 @@
   display: flex;
   align-items: center;
   margin: 0;
-  height: 32px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  min-height: 32px;
+  padding-block: 8px;
 }
 
-.listened-button {
+.listened-button, .favourite-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -380,16 +391,16 @@
   margin-top: 6px;
 }
 
-.listened-button-active {
+.listened-button-active, .favourite-button-active {
   background-color: rgb(255, 255, 255);
 }
 
-.listened-button-inactive {
+.listened-button-inactive, .favourite-button-inactive {
   background-color: grey;
   transition: background-color 0.3s ease;
 }
 
-.listened-button-inactive:hover {
+.listened-button-inactive:hover, .favourite-button-inactive:hover {
   background-color: white;
 }
 
@@ -397,6 +408,12 @@
   height: 20px;
   filter: brightness(0%);
   padding-bottom: 4px;
+}
+
+.favourite-icon {
+  padding-top: 2px;
+  height: 20px;
+  filter: brightness(0%);
 }
 
 @media (max-width: 768px) {

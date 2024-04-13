@@ -2,7 +2,6 @@ import axios from 'axios'
 import { STRAPI_TOKEN } from '../config'
 
 
-
 export const getStrapiUser = async (user: string, password: string) => {
   try {
     const data = JSON.stringify({
@@ -60,7 +59,13 @@ export const getStrapiAlbum = async (id: number) => {
 
 
 export const postAlbum = async (
-  album_id: string, user_id: number, link: string, title: string, artist: string, rating?: number) => {
+  album_id: string, 
+  user_id: number, 
+  link: string, 
+  title: string, 
+  artist: string, 
+  favourite: boolean, 
+  rating?: number) => {
   const data = JSON.stringify({
     "data": {
       "album_id": album_id,
@@ -68,7 +73,8 @@ export const postAlbum = async (
       "user_id": user_id,
       "image_link": link,
       "title": title,
-      "artist": artist
+      "artist": artist,
+      "favourite": favourite
     }
   })
   
@@ -93,10 +99,39 @@ export const postAlbum = async (
 }
 
 
-export const putAlbum = async (id: number, rating: number) => {
+export const putAlbumRating = async (id: number, rating: number) => {
   const data = JSON.stringify({
     "data": {
       "rating": rating
+    }
+  })
+  
+  const config = {
+    method: 'put',
+    maxBodyLength: Infinity,
+    url: `https://hifi-app-strapi.fly.dev/api/albums/${id}`,
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
+    },
+    data : data
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log('put request not allowed:')
+      console.error(error)
+    })
+  
+}
+
+export const putAlbumFavourites = async (id: number, favourite: boolean) => {
+  const data = JSON.stringify({
+    "data": {
+      "favourite": favourite
     }
   })
   

@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
-import { deleteAlbum, postAlbum, putAlbum, userScore } from "../../api/strapi-api.ts"
+import { deleteAlbum, postAlbum, putAlbumFavourites, putAlbumRating, userScore } from "../../api/strapi-api.ts"
 import listenedIcon from "../../assets/icons/listened.svg"
+import favouriteIcon from "../../assets/icons/favourite.svg"
 import spotifyIcon from "../../assets/icons/spotify.svg"
 import Tracks from "./Tracks.tsx"
 
@@ -15,8 +16,10 @@ const AlbumPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const [album, setAlbum] = useState<any>(null)
   const [log, setLog] = useState<any>()
-  const [listened, setListened] = useState<any>()
+  const [listened, setListened] = useState<boolean>()
+  const [favourite, setFavourite] = useState<boolean>()
   const [currentRating, setCurrentRating] = useState<number | undefined>()
+  const [loading, setLoading] = React.useState<boolean>(true)
 
   const parseJwt = (token: string) => {
     try {
@@ -28,39 +31,48 @@ const AlbumPage: React.FC = () => {
 
 
   useEffect(() => {
+    setLoading(true)
     if (auth) {
       setId(parseJwt(auth).id)
     }
-
+  
     const fetchAlbum = async () => {
       try {
         if (token && albumId) {
           const fetchedAlbum = await getAlbum(token, albumId)
           setAlbum(fetchedAlbum)
+          setLoading(false)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
+        setLoading(false)
       }
     }
-
+  
     const fetchScore = async () => {
       try {
         if (id && albumId) {
           const l = await userScore(id, albumId)
           setLog(l)
-          setCurrentRating(l.attributes.rating)
+          l ? setListened(true) : setListened(false)
+          l ? setCurrentRating(l.attributes.rating) : setCurrentRating(undefined)
+          l ? setFavourite(l.attributes.favourite) : setFavourite(false)
+
+          setLoading(false)
         }
       } catch (error) {
         console.error("Error fetching album:", error)
+        setLoading(false)
       }
     }
     fetchScore()
     fetchAlbum()
   }, [token, albumId, auth, listened, id])
+  
 
   const postNewAlbum = async (aId: string, rating: number) => {
     if (id) {
-      await postAlbum(aId, id, album.images[0].url, album.name, album.artists[0].name, rating)
+      await postAlbum(aId, id, album.images[0].url, album.name, album.artists[0].name, false,rating)
     }
     else {
       console.log('no auth')
@@ -70,7 +82,7 @@ const AlbumPage: React.FC = () => {
   
   const putExistingAlbum = async (rating: number) => {
     if (auth && log) {
-      await putAlbum(log.id, rating)
+      await putAlbumRating(log.id, rating)
     }
     else {
       console.log('no auth')
@@ -80,7 +92,7 @@ const AlbumPage: React.FC = () => {
 
 
   const deleteExistingAlbum = async () => {
-    if (auth && log) {
+    if (auth && listened) {
       await deleteAlbum(log.id)
       setLog(null)
     }
@@ -91,6 +103,8 @@ const AlbumPage: React.FC = () => {
 
   const handleDelete = () => {
     if (albumId && log) {
+      setListened(false)
+      setCurrentRating(undefined)
       console.log(log)
       setCurrentRating(undefined)
       deleteExistingAlbum()
@@ -98,7 +112,6 @@ const AlbumPage: React.FC = () => {
   }
 
   const handleInputChange = (input: string) => {
-    console.log(input)
     if (albumId) {
       if (log) {
         setCurrentRating(parseInt(input))
@@ -109,6 +122,13 @@ const AlbumPage: React.FC = () => {
         setCurrentRating(parseInt(input))
         postNewAlbum(albumId, parseInt(input))
       }
+    }
+  }
+
+  const handleFavouriteChange = () => {
+    if (log) {
+      setFavourite(!favourite)
+      putAlbumFavourites(log.id, !favourite)
     }
   }
 
@@ -133,17 +153,31 @@ const AlbumPage: React.FC = () => {
   const albumButtons = () => {
     const albumButtons = []
 
-    if (log || listened) {
+    if (listened) {
       albumButtons.push(
-        <div className='listened-button listened-button-active' onClick={() => handleDelete()}>
+        <div className='listened-button listened-button-active' onClick={() => (!loading && handleDelete())}>
           <img className='listened-icon' src={listenedIcon} />
         </div>
       )
     }
     else {
       albumButtons.push(
-        <div className='listened-button listened-button-inactive' onClick={() => handleInputChange('')}>
+        <div className='favourite-button favourite-button-inactive' onClick={() => (!loading && handleInputChange(''))}>
           <img className='listened-icon listened-icon-inactive' src={listenedIcon} />
+        </div>
+      )
+    }
+    if (favourite) {
+      albumButtons.push(
+        <div className='favourite-button favourite-button-active' onClick={() => (!loading && handleFavouriteChange())}>
+          <img className='favourite-icon' src={favouriteIcon} />
+        </div>
+      )
+    }
+    else {
+      albumButtons.push(
+        <div className='favourite-button favourite-button-inactive' onClick={() => (!loading && handleFavouriteChange())}>
+          <img className='favourite-icon favourite-icon-inactive' src={favouriteIcon} />
         </div>
       )
     }
@@ -167,13 +201,13 @@ const AlbumPage: React.FC = () => {
       if (currentRating && i === currentRating) {
         ratingComponents.push(
           <div className='rating-component-active'>
-            <h3 className='rating-text-active' onClick={() => handleInputChange('')}>{i}</h3>
+            <h3 className='rating-text-active' onClick={() => (!loading && handleInputChange(''))}>{i}</h3>
           </div>)
       }
       else {
         ratingComponents.push(
           <div className='rating-component-inactive'>
-            <h3 className='rating-text-inactive' onClick={() => handleInputChange(str)}>{i}</h3>
+            <h3 className='rating-text-inactive' onClick={() => (!loading && handleInputChange(str))}>{i}</h3>
           </div>
         )
       }

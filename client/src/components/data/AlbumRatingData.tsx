@@ -28,15 +28,18 @@ const AlbumRatingData: React.FC<AlbumRatingDataProps> = ({ albums }) => {
     const height = (count / allRatings) * MAX_HEIGHT * multiplicationFactor
 
     return (
-      <div className='rating-bar' style={{height: `${height + 2}px`}}
-        onMouseEnter={() => { 
-          setHoveredRating(rating) 
-          setHoveredCount(count)
-        }}
-        onMouseLeave={() => {
-          setHoveredRating(null) 
-          setHoveredCount(0)
-        }}>
+      <div>
+        <div className='rating-bar' style={{height: `${height + 2}px`}}
+          onMouseEnter={() => { 
+            setHoveredRating(rating) 
+            setHoveredCount(count)
+          }}
+          onMouseLeave={() => {
+            setHoveredRating(null) 
+            setHoveredCount(0)
+          }}>
+        </div>
+
       </div>
     )
   }

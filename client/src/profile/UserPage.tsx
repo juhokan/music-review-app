@@ -61,7 +61,7 @@ const UserPage: React.FC = () => {
     const fetchAlbums = async () => {
       try {
         if (token) {
-          const items = await getUsersAlbums(token, 10)
+          const items = await getUsersAlbums(token, 10, 0)
           setAlbums(items)
           console.log("New release response:", items)
         }
@@ -100,14 +100,18 @@ const UserPage: React.FC = () => {
     )
   }
   
-  const handleHeaderClick = () => {
+  const handleRecentHeaderClick = () => {
     navigate(AppRoute.UsersAlbums)
+  }
+
+  const handleSavedHeaderClick = () => {
+    navigate(AppRoute.SavedAlbums)
   }
 
   const recentActivity = () => {
     return (
       <div>
-        <div className='new-releases-header' onClick={handleHeaderClick}>
+        <div className='new-releases-header' onClick={handleRecentHeaderClick}>
           <h2 className='new-releases-header-text'>Recent Activity</h2>
           <img className='new-releases-image' src={pageLinkImage} />
         </div>
@@ -139,7 +143,10 @@ const UserPage: React.FC = () => {
       <>
         {albums.length > 0 && (
           <div>
-            <h2 className='new-releases-header new-releases-header-text'>Saved Albums</h2>
+            <div className='new-releases-header' onClick={handleSavedHeaderClick}>
+              <h2 className='new-releases-header-text'>Saved Albums</h2>
+              <img className='new-releases-image' src={pageLinkImage} />
+            </div>
             <div className='album-card-container'> 
               {albums.map((album) => (
                 <Album 

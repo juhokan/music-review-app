@@ -1,7 +1,9 @@
 export enum AppRoute {
   Home = '/',
   New = '/new',
-  Search = '/results',
+  Search = '/search',
   Profile = '/profile',
-  Callback = '/callback'
+  Callback = '/callback',
+  UsersAlbums = '/profile/albums',
+  SavedAlbums = '/profile/saved'
 }

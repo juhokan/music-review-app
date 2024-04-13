@@ -58,6 +58,11 @@
   margin-bottom: 0px !important;
 }
 
+.album-page-cover {
+  max-width: 600px;
+  width: 90vw;
+}
+
 .progress-bar-container {
   width: 40%;
   height: 4px;
@@ -103,8 +108,9 @@
   top: 0;
   width: 100%;
   box-sizing: border-box;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 1000;
+  backdrop-filter: blur(15px);
 }
 
 .header-image {
@@ -130,6 +136,41 @@
   right: 32px;
 }
 
+.login-container {
+  margin: 0 auto !important;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  max-width: 600px;
+}
+
+.login-input {
+  background-color: black !important;
+  padding-left: 10px;
+  border: 1px solid;
+  border-color: transparent !important;
+  border-radius: 32px;
+  height: 32px;
+  color: white;
+  border: 1px solid #ccc !important;
+  width: 0vw;
+  max-width: 587px;
+  width: 74vw;
+}
+
+.login-input:focus-visible {
+  border: 1px solid #ccc !important;
+  outline: transparent !important;
+}
+
+.login-input-container {
+  text-align: left;
+}
+
+.login-input-text {
+  margin: 16px;
+}
+
 ::-webkit-input-placeholder {
   /* WebKit browsers */
    color: transparent;
@@ -139,11 +180,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
 }
 
 .profile-container {
-  display: flex;
+  padding: 2rem;
+  text-align: left;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
 }
 
 .profile-data-container {
@@ -173,15 +221,32 @@
 
 
 .profile-image {
-  padding: 1rem;
-  height: 150px;
-  width: 150px;
+  height: 220px;
+  width: 220px;
   border-radius: 150px;
 }
 
 .profile-name {
   margin: 0;
-  padding-top: 2rem;
+  padding: 0px !important;
+}
+
+@media (max-width: 768px) {
+  .profile-image {
+    height: 120px;
+    width: 120px;
+  }
+
+  .profile-container {
+    max-width: 500px;
+    text-align: center;
+  }
+
+  .profile-name {
+    margin: 0;
+    padding-top: 1rem !important;
+    font-size: 50px !important;
+  }
 }
 
 .search-hover {
@@ -189,7 +254,7 @@
   background: url('/src/assets/icons/search.svg') no-repeat left;
   background-size: 15px;
   background-position: 10px 9px;
-  background-color: black !important;
+  background-color: transparent !important;
   border: 1px solid;
   border-color: transparent !important;
   border-radius: 32px;
@@ -240,7 +305,8 @@
 
 .rating-album-text {
   margin: 0;
-  width: 500px;
+  max-width: 500px;
+  width: 70vw;
   padding-bottom: 16px;
 }
 
@@ -253,8 +319,31 @@
 
 .rating-album-data-container {
   text-align: left;
-  width: 600px;
+  margin: 10px;
+  max-width: 600px;
+  width: 90vh;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .rating-text-inactive {
+    font-size: 16px;
+  }
+  .rating-component-active {
+    padding-right: 8px;
+    padding-left: 8px;
+    width: 32px !important;
+    color: white;
+  }
+  .rating-text-active {
+    font-size: 20px;
+  }
+
+  .new-releases-image {
+    height: 32px;
+    padding-top: 4px !important;
+    padding-inline: 16px !important;
+  }
 }
 
 .tracks {
@@ -310,9 +399,70 @@
   padding-bottom: 4px;
 }
 
+@media (max-width: 768px) {
+
+  .listened-button {
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 40px;
+  }
+  
+  .listened-icon {
+    height: 16px;
+    padding-bottom: 4px;
+  }
+
+  .spotify-button {
+    height: 40px;
+  }
+
+  .spotify-icon {
+    height: 40px !important;
+  }
+
+}
+
+
 .spotify-icon {
   height: 48px;
   filter: brightness(75%);
+}
+
+.rating-bar {
+  margin: 1px;
+  background-color: #bebebe;
+  width: 20px;
+}
+
+.rating-bar:hover {
+  background-color: #ffffff;
+}
+
+.rating-bar-data-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 282px;
+  text-align: left;
+  margin: 0 auto;
+}
+.rating-bar-data-header {
+  display: flex;
+  padding: 4px;
+}
+
+.rating-bar-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.rating-bar-number {
+  padding-top: 8px;
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+  padding-inline: 8px;
 }
 
 .rating-track-name {
@@ -332,8 +482,9 @@
   position: absolute;
   top: 8px;
   left: 8px;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
@@ -362,6 +513,7 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
   cursor: pointer;
 }
+
 .rating-text-inactive {
   font-size: 20px;
 }
@@ -382,11 +534,44 @@
 }
 
 
+.sort-container {
+  max-width: 1000px;
+  width: 85vw;
+  margin: 0 auto;
+  display: flex;  
+  align-items: center;
+}
+
+.sort-header {
+  font-size: 16px !important;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.sort-select {
+  margin-right: 8px;
+}
+
+.new-releases-image {
+  max-height: 40px;
+  padding-top: 8px;
+  padding-inline: 24px;
+}
+
 .new-releases-header {
+  align-items: center;
+  display: flex;
   text-align: left;
-  margin: 0;
   padding-left: 2rem;
   cursor: pointer;
+}
+
+.new-releases-header-text {
+  margin: 0;
 }
 
 .new-release-link-card {

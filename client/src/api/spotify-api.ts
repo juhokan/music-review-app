@@ -72,14 +72,15 @@ export const getNewReleases = async (token: string, limit: number) => {
   }
 }
 
-export const getUsersAlbums = async (token: string, limit: number) => {
+export const getUsersAlbums = async (token: string, limit: number, offset: number) => {
   try {
     const {data} = await axios.get(`https://api.spotify.com/v1/me/albums`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
       params: {
-        limit: limit
+        limit: limit,
+        offset: offset
       }
     })
     console.log(data)

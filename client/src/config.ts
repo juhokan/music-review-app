@@ -10,5 +10,3 @@ export const STRAPI_TOKEN = import.meta.env.VITE_STRAPI_TOKEN
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? 'http://localhost:1337'
 
 export const VALIDATE_URL = `${AUTH_ENDPOINT}?`
-
-//client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`

@@ -6,13 +6,16 @@ import AlbumPage from '../albums/AlbumPage'
 import NewReleasesPage from '../albums/NewReleasesPage'
 import AlbumSearch from '../albums/AlbumSearch'
 import UserPage from '../../profile/UserPage'
-import GoogleAuthCallback from '../../api/GoogleAuthCallback'
 import Header from './Header'
-import { SearchContext } from '../../context'
+import { SearchContext, UserContext } from '../../context'
 import CallbackPage from './CallbackPage'
+import LoginPage from '../../profile/LoginPage'
+import RatedAlbums from '../albums/RatedAlbums'
+import SavedAlbums from '../albums/SavedAlbums'
 
 const AppContainer: React.FC = () => {
   const { input } = React.useContext(SearchContext)
+  const { auth } = React.useContext(UserContext)
 
   return (
     
@@ -38,20 +41,16 @@ const AppContainer: React.FC = () => {
             <Route path=':albumId' element={<AlbumPage />} />
           </Route>
 
-          <Route path='/auth/callback/google'>
-            <Route index element={<GoogleAuthCallback/>}/>
-          </Route>
-
           <Route path={AppRoute.Profile}>
-            <Route index element={<UserPage/>}/>
+            <Route index element={auth ? (<UserPage/>) : (<LoginPage/>)}/>
+            <Route path={AppRoute.UsersAlbums} element={<RatedAlbums />} />
+            <Route path={AppRoute.SavedAlbums} element={<SavedAlbums />} />
           </Route>
 
           <Route path={AppRoute.Callback}>
             <Route index element={<CallbackPage/>}/>
           </Route>
-
-
-
+          
         </Routes>
       </div>
     </Router>

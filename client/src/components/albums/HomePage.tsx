@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { AppRoute } from "../../routes"
 import RecentAlbums from "./RecentAlbums"
 import { CLIENT_ID } from "../../config"
+import pageLinkImage from '../../assets/icons/pageLink.svg'
 
 interface NewReleaseProps {
   limit: number
@@ -82,7 +83,10 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
   return (
     <div>
       {!refreshToken && <Link className='validate-token' to={authUrl()}>Validate Token</Link>}
-      <h2 className='new-releases-header' onClick={handleHeaderClickNew}>New Releases</h2>
+      <div className='new-releases-header' onClick={handleHeaderClickNew}>
+        <h2 className='new-releases-header-text'>New Releases</h2>
+        <img className='new-releases-image' src={pageLinkImage} />
+      </div>
       <div className='album-card-container'> 
         {albums.map(album => (
           <Album 
@@ -94,7 +98,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
             rating={null}/>
         ))}
       </div>
-      <h2 className='new-releases-header'>Most Recent</h2>
+      <h2 className='new-releases-header new-releases-header-text'>Most Recent</h2>
       <RecentAlbums/>
     </div>
   )

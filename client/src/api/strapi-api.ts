@@ -1,6 +1,35 @@
 import axios from 'axios'
 import { STRAPI_TOKEN } from '../config'
 
+
+
+export const getStrapiUser = async (user: string, password: string) => {
+  try {
+    const data = JSON.stringify({
+      "identifier": user,
+      "password": password
+    })
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://hifi-app-strapi.fly.dev/api/auth/local',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    }
+
+    const response = await axios.request(config)
+    console.log(JSON.stringify(response.data))
+    return response
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+
 export const getAllStrapiAlbums = async () => {
   try {
     const config = {

@@ -5,29 +5,55 @@ import { ProfileContext, SearchContext, UserContext } from "../../context"
 import { StrapiProfile } from "../../strapi/model.strapi"
 import { toStrapiUrl } from "../../strapi/util.strapi"
 import { useLocation, useNavigate } from 'react-router-dom'
+import searchIcon from "../../assets/icons/search.svg"
 
 
 const Header: React.FC = () => {
 
   const { auth } = React.useContext(UserContext)
+  const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
   const { setInput } = React.useContext(SearchContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const [isMobile, setMobile] = React.useState(false)
+
+  const MAX_WIDTH = 768
+
+  const isSearchActive = () => {
+    setMobile(window.innerWidth <= MAX_WIDTH)
+  }
+
+  const parseJwt = (token: string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]))
+    } catch (e) {
+      return null
+    }
+  }
   
 
   useEffect(() => {
+
+    isSearchActive()
+    window.addEventListener('resize', isSearchActive)
     
     if (profiles && auth) {
+      setId(parseJwt(auth).id)
       Object.values(profiles).forEach((profile) => {
-        if (profile.attributes.user_id === auth.user.id) {
+        if (profile.attributes.user_id === id) {
           setCurrent(profile)
-          return // exit loop early once a matching profile is found
+          return
         }
       })
     }
-  }, [auth, profiles])
+
+    return () => {
+      window.removeEventListener('resize', isSearchActive)
+    }
+
+  }, [auth, profiles, id])
 
 
   const headerImage = () => {
@@ -50,11 +76,22 @@ const Header: React.FC = () => {
   const headerLinks = () => {
     return (
       <div className='header-link-container'>
-        <div className='search-container'>
-          {pathname !== AppRoute.Search && <form onSubmit={handleSubmit}>
-            <input type='text' className='search-hover' />
-          </form>}
-        </div>
+        {isMobile ? (
+          pathname !== AppRoute.Search && (
+            <a href={AppRoute.Search}>
+              <img src={searchIcon} height='16px' />
+            </a>
+          )
+        ) : (
+          <div className='search-container'>
+            {pathname !== AppRoute.Search && (
+              <form onSubmit={handleSubmit}>
+                <input type='text' className='search-hover' />
+              </form>
+            )}
+          </div>
+        )}
+
         {pathname !== AppRoute.Profile && profileLink()}
       </div>
     )
@@ -72,7 +109,7 @@ const Header: React.FC = () => {
           )}
         </a>
       ) : (
-        <a href='https://hifi-app-strapi.fly.dev/api/connect/google/'>
+        <a href={AppRoute.Profile}>
           <h3>Log In</h3>
         </a>
       )

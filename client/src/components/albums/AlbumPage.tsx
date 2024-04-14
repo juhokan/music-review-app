@@ -3,10 +3,20 @@ import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { TokenContext, UserContext } from "../../context"
 import { getAlbum } from "../../api/spotify-api.ts"
-import { deleteAlbum, postAlbum, putAlbumFavourites, putAlbumRating, userScore } from "../../api/strapi-api.ts"
+import { 
+  deleteAlbum, 
+  deleteUpNext, 
+  postAlbum, 
+  postUpNext, 
+  putAlbumFavourites, 
+  putAlbumRating,
+  userScore, 
+  userUpNext 
+} from "../../api/strapi-api.ts"
 import listenedIcon from "../../assets/icons/listened.svg"
 import favouriteIcon from "../../assets/icons/favourite.svg"
 import spotifyIcon from "../../assets/icons/spotify.svg"
+import upNextIcon from "../../assets/icons/upNext.svg"
 import Tracks from "./Tracks.tsx"
 
 const AlbumPage: React.FC = () => {
@@ -16,7 +26,9 @@ const AlbumPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const [album, setAlbum] = useState<any>(null)
   const [log, setLog] = useState<any>()
+  const [upNextlog, setUpNextLog] = useState<any>()
   const [listened, setListened] = useState<boolean>()
+  const [isUpNext, setIsUpNext] = useState<boolean>()
   const [favourite, setFavourite] = useState<boolean>()
   const [currentRating, setCurrentRating] = useState<number | undefined>()
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -31,12 +43,12 @@ const AlbumPage: React.FC = () => {
 
 
   useEffect(() => {
-    setLoading(true)
     if (auth) {
       setId(parseJwt(auth).id)
     }
   
     const fetchAlbum = async () => {
+      setLoading(true)
       try {
         if (token && albumId) {
           const fetchedAlbum = await getAlbum(token, albumId)
@@ -50,6 +62,7 @@ const AlbumPage: React.FC = () => {
     }
   
     const fetchScore = async () => {
+      setLoading(true)
       try {
         if (id && albumId) {
           const l = await userScore(id, albumId)
@@ -65,14 +78,44 @@ const AlbumPage: React.FC = () => {
         setLoading(false)
       }
     }
+
+    const fetchUpNext = async () => {
+      setLoading(true)
+      try {
+        if (id && albumId) {
+          const l = await userUpNext(id, albumId)
+          setUpNextLog(l)
+          l ? setIsUpNext(true) : setIsUpNext(false)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error("Error fetching album:", error)
+        setLoading(false)
+      }
+    }
+    
+    fetchUpNext()
     fetchScore()
     fetchAlbum()
-  }, [token, albumId, auth, listened, id])
+  }, [token, albumId, auth, listened, id, isUpNext])
   
 
   const postNewAlbum = async (aId: string, rating: number) => {
     if (id) {
       await postAlbum(aId, id, album.images[0].url, album.name, album.artists[0].name, false,rating)
+      if (isUpNext) {
+        await deleteUpNext(upNextlog.id)
+        setIsUpNext(!isUpNext)
+      }
+    }
+    else {
+      console.log('no auth')
+    }
+  }
+
+  const postNewUpNext = async (aId: string) => {
+    if (id) {
+      await postUpNext(aId, id, album.images[0].url, album.name, album.artists[0].name)
     }
     else {
       console.log('no auth')
@@ -83,13 +126,16 @@ const AlbumPage: React.FC = () => {
   const putExistingAlbum = async (rating: number) => {
     if (auth && log) {
       await putAlbumRating(log.id, rating)
+      if (isUpNext) {
+        await deleteUpNext(upNextlog.id)
+        setIsUpNext(!isUpNext)
+      }
     }
     else {
       console.log('no auth')
     }
   }
   
-
 
   const deleteExistingAlbum = async () => {
     if (auth && listened) {
@@ -132,6 +178,20 @@ const AlbumPage: React.FC = () => {
     }
   }
 
+  const handleUpNextChange = () => {
+    if (upNextlog) {
+      setIsUpNext(!isUpNext)
+      deleteUpNext(upNextlog.id)
+      setUpNextLog(null)
+    }
+    else {
+      if (albumId && id) {
+        postNewUpNext(albumId)
+        setIsUpNext(!isUpNext)
+      }
+    }
+  }
+
 
   const albumData = () => {
 
@@ -162,7 +222,7 @@ const AlbumPage: React.FC = () => {
     }
     else {
       albumButtons.push(
-        <div className='favourite-button favourite-button-inactive' onClick={() => (!loading && handleInputChange(''))}>
+        <div className='listened-button listened-button-inactive' onClick={() => (!loading && handleInputChange(''))}>
           <img className='listened-icon listened-icon-inactive' src={listenedIcon} />
         </div>
       )
@@ -178,6 +238,20 @@ const AlbumPage: React.FC = () => {
       albumButtons.push(
         <div className='favourite-button favourite-button-inactive' onClick={() => (!loading && handleFavouriteChange())}>
           <img className='favourite-icon favourite-icon-inactive' src={favouriteIcon} />
+        </div>
+      )
+    }
+    if (isUpNext) {
+      albumButtons.push(
+        <div className='upnext-button upnext-button-active' onClick={() => (!loading && handleUpNextChange())}>
+          <img className='upnext-icon' src={upNextIcon} />
+        </div>
+      )
+    }
+    else {
+      albumButtons.push(
+        <div className='upnext-button upnext-button-inactive' onClick={() => (!loading && handleUpNextChange())}>
+          <img className='upnext-icon upnext-icon-inactive' src={upNextIcon} />
         </div>
       )
     }

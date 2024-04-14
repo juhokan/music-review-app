@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { TokenContext } from "../../context"
+import { TokenContext, UserContext } from "../../context"
 import createAxiosResponseInterceptor, { getNewReleases } from "../../api/spotify-api"
 import Album from "./Album"
 import { Link, useNavigate } from "react-router-dom"
@@ -7,6 +7,7 @@ import { AppRoute } from "../../routes"
 import RecentAlbums from "./RecentAlbums"
 import { CLIENT_ID } from "../../config"
 import pageLinkImage from '../../assets/icons/pageLink.svg'
+import UpNextAlbums from "./UpNextAlbums"
 
 interface NewReleaseProps {
   limit: number
@@ -15,6 +16,7 @@ interface NewReleaseProps {
 const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [albums, setAlbums] = React.useState<any[]>([])
+  const { auth } = React.useContext(UserContext)
   const { token, setToken } = React.useContext(TokenContext)
   const { refreshToken } = React.useContext(TokenContext)
   const navigate = useNavigate()
@@ -98,6 +100,12 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
             rating={null}/>
         ))}
       </div>
+      {auth && (
+        <div>
+          <h2 className='new-releases-header new-releases-header-text'>Up Next</h2>
+          <UpNextAlbums/>
+        </div>
+      )}
       <h2 className='new-releases-header new-releases-header-text'>Most Recent</h2>
       <RecentAlbums/>
     </div>

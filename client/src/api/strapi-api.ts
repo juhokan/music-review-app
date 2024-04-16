@@ -2,7 +2,6 @@ import axios from 'axios'
 import { STRAPI_TOKEN } from '../config'
 
 
-
 export const getStrapiUser = async (user: string, password: string) => {
   try {
     const data = JSON.stringify({
@@ -50,6 +49,27 @@ export const getAllStrapiAlbums = async () => {
   }
 }
 
+export const getAllStrapiupNext = async () => {
+  try {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://hifi-app-strapi.fly.dev/api/up-nexts',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${STRAPI_TOKEN}`
+      }
+    }
+
+    const response = await axios.request(config)
+    console.log(response.data)
+    return response.data.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
 export const getStrapiAlbum = async (id: number) => {
   const {data} = await axios.get(`https://hifi-app-strapi.fly.dev/albums/${id}`, {
     params: {}
@@ -60,7 +80,13 @@ export const getStrapiAlbum = async (id: number) => {
 
 
 export const postAlbum = async (
-  album_id: string, user_id: number, link: string, title: string, artist: string, rating?: number) => {
+  album_id: string, 
+  user_id: number, 
+  link: string, 
+  title: string, 
+  artist: string, 
+  favourite: boolean, 
+  rating?: number) => {
   const data = JSON.stringify({
     "data": {
       "album_id": album_id,
@@ -68,7 +94,8 @@ export const postAlbum = async (
       "user_id": user_id,
       "image_link": link,
       "title": title,
-      "artist": artist
+      "artist": artist,
+      "favourite": favourite
     }
   })
   
@@ -92,11 +119,76 @@ export const postAlbum = async (
     })
 }
 
+export const postUpNext = async (
+  album_id: string, 
+  user_id: number, 
+  link: string, 
+  title: string, 
+  artist: string) => {
+  const data = JSON.stringify({
+    "data": {
+      "album_id": album_id,
+      "user_id": user_id,
+      "image_link": link,
+      "title": title,
+      "artist": artist
+    }
+  })
+  
+  const config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://hifi-app-strapi.fly.dev/api/up-nexts/',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
+    },
+    data : data
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
 
-export const putAlbum = async (id: number, rating: number) => {
+
+export const putAlbumRating = async (id: number, rating: number) => {
   const data = JSON.stringify({
     "data": {
       "rating": rating
+    }
+  })
+  
+  const config = {
+    method: 'put',
+    maxBodyLength: Infinity,
+    url: `https://hifi-app-strapi.fly.dev/api/albums/${id}`,
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
+    },
+    data : data
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log('put request not allowed:')
+      console.error(error)
+    })
+  
+}
+
+export const putAlbumFavourites = async (id: number, favourite: boolean) => {
+  const data = JSON.stringify({
+    "data": {
+      "favourite": favourite
     }
   })
   
@@ -142,6 +234,26 @@ export const deleteAlbum = async (id: number) => {
   
 }
 
+export const deleteUpNext = async (id: number) => {
+  const config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: `https://hifi-app-strapi.fly.dev/api/up-nexts/${id}`,
+    headers: { 
+      'Authorization': `Bearer ${STRAPI_TOKEN}`
+    }
+  }
+  
+  axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  
+}
+
 export const userScore = async (id: number, album: string) => {
   try {
     const config = {
@@ -161,6 +273,36 @@ export const userScore = async (id: number, album: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const checkAlbumsForScore = (id: number, album: string, data: any) => {
+  for (const obj of data) {
+    if (obj.attributes.user_id === id && obj.attributes.album_id === album) {
+      return obj
+    }
+  }
+  return null
+}
+
+export const userUpNext = async (id: number, album: string) => {
+  try {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://hifi-app-strapi.fly.dev/api/up-nexts',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${STRAPI_TOKEN}`
+      }
+    }
+    const response = await axios.request(config)
+    return checkUpNextForLog(id, album, response.data.data)
+    
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const checkUpNextForLog = (id: number, album: string, data: any) => {
   for (const obj of data) {
     if (obj.attributes.user_id === id && obj.attributes.album_id === album) {
       return obj

@@ -6,6 +6,7 @@ import { StrapiProfile } from "../../strapi/model.strapi"
 import { toStrapiUrl } from "../../strapi/util.strapi"
 import { useLocation, useNavigate } from 'react-router-dom'
 import searchIcon from "../../assets/icons/search.svg"
+import settingsIcon from "../../assets/icons/settings.svg"
 
 
 const Header: React.FC = () => {
@@ -78,7 +79,7 @@ const Header: React.FC = () => {
       <div className='header-link-container'>
         {isMobile ? (
           pathname !== AppRoute.Search && (
-            <a href={AppRoute.Search}>
+            <a className='search-mobile' href={AppRoute.Search}>
               <img src={searchIcon} height='16px' />
             </a>
           )
@@ -93,6 +94,9 @@ const Header: React.FC = () => {
         )}
 
         {pathname !== AppRoute.Profile && profileLink()}
+        {pathname === AppRoute.Profile && settingsLink()}
+
+
       </div>
     )
   }
@@ -111,6 +115,22 @@ const Header: React.FC = () => {
       ) : (
         <a href={AppRoute.Profile}>
           <h3>Log In</h3>
+        </a>
+      )
+    )
+  }
+
+  const settingsLink = () => {
+    return (
+      auth && (
+        <a className='header-profile-link' href={AppRoute.Settings}>
+          { current && current.attributes.profile_image.data && (
+            <img 
+              className='header-profile-image'
+              style={{height: '18px'}}
+              src={settingsIcon}
+            />
+          )}
         </a>
       )
     )

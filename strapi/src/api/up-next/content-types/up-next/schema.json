@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "albums",
+  "collectionName": "up_nexts",
   "info": {
-    "singularName": "album",
-    "pluralName": "albums",
-    "displayName": "Album",
+    "singularName": "up-next",
+    "pluralName": "up-nexts",
+    "displayName": "UpNext",
     "description": ""
   },
   "options": {
@@ -14,33 +14,22 @@
   "attributes": {
     "album_id": {
       "type": "string",
-      "required": true,
-      "unique": false
-    },
-    "rating": {
-      "type": "decimal",
-      "max": 10,
-      "min": 0
+      "required": true
     },
     "user_id": {
       "type": "integer",
-      "required": true
-    },
-    "image_link": {
-      "type": "string",
       "required": true
     },
     "title": {
       "type": "string",
       "required": true
     },
-    "artist": {
+    "image_link": {
       "type": "string",
       "required": true
     },
-    "favourite": {
-      "type": "boolean",
-      "default": false,
+    "artist": {
+      "type": "string",
       "required": true
     }
   }

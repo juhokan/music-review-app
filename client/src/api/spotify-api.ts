@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { CLIENT_ID, CLIENT_SECRET } from '../config'
-const TOKEN_KEY = 'token'
 
 
 export const searchArtists = async (token: string, key: string) => {
@@ -131,7 +130,6 @@ function createAxiosResponseInterceptor(refreshToken: string, setToken: (token: 
           .then((response) => {
             console.log('Token refreshed successfully.')
             setToken(response.data.access_token)
-            window.localStorage.setItem(TOKEN_KEY, response.data.access_token)
             error.response.config.headers["Authorization"] = "Bearer " + response.data.access_token
 
             return axios(error.response.config)

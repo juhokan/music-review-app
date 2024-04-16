@@ -14,18 +14,14 @@ import AlbumRatingData from '../components/data/AlbumRatingData'
 
 
 const UserPage: React.FC = () => {
-  const { auth, setAuth } = React.useContext(UserContext)
+  const { auth } = React.useContext(UserContext)
   const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
-  const { token, setToken, setRefreshToken } = React.useContext(TokenContext)
+  const { token } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
   const navigate = useNavigate()
-
-  const TOKEN_KEY = 'token'
-  const AUTH_TOKEN = 'auth'
-  const REFRESH_TOKEN_KEY = 'refresh'
 
   const parseJwt = (token: string) => {
     try {
@@ -77,6 +73,7 @@ const UserPage: React.FC = () => {
 
   const filteredAlbums = strapiAlbums.filter(album => album.attributes.user_id === id)
   filteredAlbums.sort((a, b) => new Date(b.attributes.updatedAt).getTime() - new Date(a.attributes.updatedAt).getTime())
+  const favouriteAlbums = filteredAlbums.filter(album => album.attributes.favourite === true)
 
 
   const profiledata = () => {
@@ -116,28 +113,70 @@ const UserPage: React.FC = () => {
           <img className='new-releases-image' src={pageLinkImage} />
         </div>
         <div className='album-card-container'> 
-          {filteredAlbums.map((album) => (
-            <Album 
-              key={album.id} 
-              id={album.attributes.album_id} 
-              link={album.attributes.image_link} 
-              name={album.attributes.title} 
-              artistName={album.attributes.artist} 
-              rating={album.attributes.rating}/>
-          ))}
+          {filteredAlbums.length > 10 ? (
+            filteredAlbums.slice(0, 10).map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          ) : (
+            filteredAlbums.map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          )}
         </div>
       </div>
     )
   }
 
-  const handleLogOut = () => {
-    setAuth(null)
-    setToken(null)
-    setRefreshToken(null)
-    window.localStorage.removeItem(AUTH_TOKEN)
-    window.localStorage.removeItem(REFRESH_TOKEN_KEY)
-    window.localStorage.removeItem(TOKEN_KEY)
+  const favourites = () => {
+    return (
+      <div>
+        <div className='new-releases-header'>
+          <h2 className='new-releases-header-text'>Favourites</h2>
+          <img className='new-releases-image' src={pageLinkImage} />
+        </div>
+        <div className='album-card-container'> 
+          {favouriteAlbums.length > 10 ? (
+            favouriteAlbums.slice(0, 10).map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          ) : (
+            favouriteAlbums.map((album) => (
+              <Album 
+                key={album.id} 
+                id={album.attributes.album_id} 
+                link={album.attributes.image_link} 
+                name={album.attributes.title} 
+                artistName={album.attributes.artist} 
+                rating={album.attributes.rating}
+              />
+            ))
+          )}
+        </div>
+      </div>
+    )
   }
+
   const usersSavedAlbums = () => {
     return (
       <>
@@ -173,15 +212,14 @@ const UserPage: React.FC = () => {
           <>
             {profiledata()}
             {recentActivity()}
+            {favourites()}
             {usersSavedAlbums()}
           </>
         ) : (
           <h2>No Profile Found</h2>
         )}
       </div>
-      <a href={AppRoute.Home} onClick={handleLogOut}>
-        <h3>Log Out</h3>
-      </a>
+      
     </div>
   )
 }

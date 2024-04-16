@@ -55,19 +55,21 @@ const SavedAlbums: React.FC = () => {
   }, [refreshToken, token, offset])
 
   return (
-    <div className='album-card-page-container'>
-      {albums.map((album) => (
-        <Album
-          key={album.album.id}
-          id={album.album.id}
-          link={album.album.images[0].url}
-          name={album.album.name}
-          artistName={album.album.artists[0].name}
-          rating={null}
-        />
-      ))}
+    <div>
+      <div className='album-card-page-container'>
+        {albums.map((album) => (
+          <Album
+            key={album.album.id}
+            id={album.album.id}
+            link={album.album.images[0].url}
+            name={album.album.name}
+            artistName={album.album.artists[0].name}
+            rating={null}
+          />
+        ))}
+        {!loading && albums.length === 0 && <h2>No albums found</h2>}
+      </div>
       {loading && <h2>Loading...</h2>}
-      {!loading && albums.length === 0 && <h2>No albums found</h2>}
     </div>
   )
 }

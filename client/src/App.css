@@ -119,6 +119,9 @@
 
 .header-profile-link {
   padding-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-profile-image, .header-profile-link {
@@ -219,7 +222,6 @@
   margin: 0;
 }
 
-
 .profile-image {
   height: 220px;
   width: 220px;
@@ -229,6 +231,15 @@
 .profile-name {
   margin: 0;
   padding: 0px !important;
+}
+
+.profile-settings-container {
+  text-align: end;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 100px;
+  margin-right: 35px;
 }
 
 @media (max-width: 768px) {
@@ -247,6 +258,16 @@
     padding-top: 1rem !important;
     font-size: 50px !important;
   }
+
+  .profile-settings-container {
+    margin-right: 22px;
+  }
+}
+
+.search-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-hover {
@@ -362,12 +383,11 @@
   display: flex;
   align-items: center;
   margin: 0;
-  height: 32px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  min-height: 32px;
+  padding-block: 8px;
 }
 
-.listened-button {
+.listened-button, .favourite-button, .upnext-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -380,16 +400,16 @@
   margin-top: 6px;
 }
 
-.listened-button-active {
+.listened-button-active, .favourite-button-active, .upnext-button-active {
   background-color: rgb(255, 255, 255);
 }
 
-.listened-button-inactive {
+.listened-button-inactive, .favourite-button-inactive, .upnext-button-inactive {
   background-color: grey;
   transition: background-color 0.3s ease;
 }
 
-.listened-button-inactive:hover {
+.listened-button-inactive:hover, .favourite-button-inactive:hover, .upnext-button-inactive:hover {
   background-color: white;
 }
 
@@ -399,9 +419,21 @@
   padding-bottom: 4px;
 }
 
+.favourite-icon {
+  padding-top: 2px;
+  height: 20px;
+  filter: brightness(0%);
+}
+
+.upnext-icon {
+  padding-left: 3px;
+  height: 20px;
+  filter: brightness(0%);
+}
+
 @media (max-width: 768px) {
 
-  .listened-button {
+  .listened-button, .favourite-button, .upnext-button {
     height: 40px !important;
     width: 40px !important;
     border-radius: 40px;
@@ -410,6 +442,14 @@
   .listened-icon {
     height: 16px;
     padding-bottom: 4px;
+  }
+
+  .favourite-icon {
+    height: 16px;
+  }
+
+  .upnext-icon {
+    height: 16px;
   }
 
   .spotify-button {

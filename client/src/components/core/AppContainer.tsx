@@ -12,6 +12,7 @@ import CallbackPage from './CallbackPage'
 import LoginPage from '../../profile/LoginPage'
 import RatedAlbums from '../albums/RatedAlbums'
 import SavedAlbums from '../albums/SavedAlbums'
+import SettingsPage from '../../profile/SettingsPage'
 
 const AppContainer: React.FC = () => {
   const { input } = React.useContext(SearchContext)
@@ -45,6 +46,7 @@ const AppContainer: React.FC = () => {
             <Route index element={auth ? (<UserPage/>) : (<LoginPage/>)}/>
             <Route path={AppRoute.UsersAlbums} element={<RatedAlbums />} />
             <Route path={AppRoute.SavedAlbums} element={<SavedAlbums />} />
+            <Route path={AppRoute.Settings} element={<SettingsPage />} />
           </Route>
 
           <Route path={AppRoute.Callback}>

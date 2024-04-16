@@ -5,5 +5,6 @@ export enum AppRoute {
   Profile = '/profile',
   Callback = '/callback',
   UsersAlbums = '/profile/albums',
-  SavedAlbums = '/profile/saved'
+  SavedAlbums = '/profile/saved',
+  Settings = '/profile/settings'
 }

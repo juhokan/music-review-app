@@ -119,6 +119,9 @@
 
 .header-profile-link {
   padding-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-profile-image, .header-profile-link {
@@ -259,6 +262,12 @@
   .profile-settings-container {
     margin-right: 22px;
   }
+}
+
+.search-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-hover {

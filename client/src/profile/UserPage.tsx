@@ -9,25 +9,19 @@ import { getUsersAlbums } from '../api/spotify-api'
 import { AppRoute } from '../routes'
 import { useNavigate } from 'react-router-dom'
 import pageLinkImage from '../assets/icons/pageLink.svg'
-import settingsIcon from '../assets/icons/settings.svg'
 import AlbumRatingData from '../components/data/AlbumRatingData'
 
 
 
 const UserPage: React.FC = () => {
-  const { auth, setAuth } = React.useContext(UserContext)
+  const { auth } = React.useContext(UserContext)
   const [id, setId] = React.useState<number>()
   const { profiles } = React.useContext(ProfileContext)
-  const { token, setToken, setRefreshToken } = React.useContext(TokenContext)
+  const { token } = React.useContext(TokenContext)
   const [current, setCurrent] = React.useState<StrapiProfile | null>(null)
   const [albums, setAlbums] = React.useState<any[]>([])
   const [strapiAlbums, setStrapiAlbums] = React.useState<any[]>([])
   const navigate = useNavigate()
-  const [showSettings, setShowSettings] = React.useState(false)
-
-  const TOKEN_KEY = 'token'
-  const AUTH_TOKEN = 'auth'
-  const REFRESH_TOKEN_KEY = 'refresh'
 
   const parseJwt = (token: string) => {
     try {
@@ -183,27 +177,6 @@ const UserPage: React.FC = () => {
     )
   }
 
-  const handleLogOut = () => {
-    setAuth(null)
-    setToken(null)
-    setRefreshToken(null)
-    window.localStorage.removeItem(AUTH_TOKEN)
-    window.localStorage.removeItem(REFRESH_TOKEN_KEY)
-    window.localStorage.removeItem(TOKEN_KEY)
-  }
-
-  const toggleSettings = () => {
-    setShowSettings(!showSettings)
-  }
-
-  const settingsMenu = () => {
-    return (
-      <div className='settings-menu'>
-        <button onClick={handleLogOut}>Log Out</button>
-      </div>
-    )
-  }
-
   const usersSavedAlbums = () => {
     return (
       <>
@@ -245,10 +218,6 @@ const UserPage: React.FC = () => {
         ) : (
           <h2>No Profile Found</h2>
         )}
-        <div className='profile-settings-container'>
-          <img className='profile-settings-icon' height='20px' src={settingsIcon} onClick={toggleSettings}></img>
-          {showSettings && settingsMenu()}
-        </div>
       </div>
       
     </div>

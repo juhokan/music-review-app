@@ -68,7 +68,7 @@ const App: React.FC = () => {
     if (refreshToken) {
       createAxiosResponseInterceptor(refreshToken, setToken)
     }
-  }, [refreshToken, token])
+  }, [refreshToken, token, auth])
 
 
   const setAndSaveToken = (token: string | null) => {
@@ -89,9 +89,19 @@ const App: React.FC = () => {
     initToken()
   }
 
+  const setAndSaveauth = (auth: string | null) => {
+    if (auth) {
+      setAuth(auth)
+      window.localStorage.setItem(AUTH_TOKEN, auth)
+    } else {
+      window.localStorage.removeItem(AUTH_TOKEN)
+    }
+    initToken()
+  }
+
   const initAuth = () => {
     const t = window.localStorage.getItem(AUTH_TOKEN)
-    if (t) {
+    if (t && !auth) {
       setAuth(t)
     }
   }
@@ -99,7 +109,7 @@ const App: React.FC = () => {
   
   return (
     <>
-      <UserContext.Provider value={{ auth, setAuth }}>
+      <UserContext.Provider value={{ auth, setAuth: setAndSaveauth }}>
         <ProfileContext.Provider value={{ profiles }}>
           <TokenContext.Provider 
             value={{

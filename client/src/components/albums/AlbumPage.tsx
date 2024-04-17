@@ -236,7 +236,8 @@ const AlbumPage: React.FC = () => {
     }
     else {
       albumButtons.push(
-        <div className='favourite-button favourite-button-inactive' onClick={() => (!loading && handleFavouriteChange())}>
+        <div className='favourite-button favourite-button-inactive' 
+          onClick={() => (!loading && handleFavouriteChange())}>
           <img className='favourite-icon favourite-icon-inactive' src={favouriteIcon} />
         </div>
       )

@@ -18,6 +18,7 @@ const AlbumSearch: React.FC<AlbumSearchProps> = ({ inputValue }) => {
       setPageInput(inputValue)
       fetchAlbums(inputValue)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchAlbums = async (v: string) => {
@@ -52,6 +53,7 @@ const AlbumSearch: React.FC<AlbumSearchProps> = ({ inputValue }) => {
         {albums.map(album => (
           <Album 
             key={album.id} 
+            user_id={null}
             id={album.id} 
             link={album.images[0].url} 
             name={album.name} 

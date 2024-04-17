@@ -171,6 +171,7 @@ const RatedAlbums: React.FC = () => {
         {filteredAlbums.length > 0 ? (filteredAlbums.map((album) => (
           <Album
             key={album.id}
+            user_id={null}
             id={album.attributes.album_id}
             link={album.attributes.image_link}
             name={album.attributes.title}

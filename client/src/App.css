@@ -1,6 +1,6 @@
 #root {
   margin: 0 auto;
-  padding-top: 5rem;
+  padding-top: 6rem;
   text-align: center;
 }
 
@@ -66,13 +66,13 @@
 .progress-bar-container {
   width: 40%;
   height: 4px;
-  background-color: #333; /* Dark background */
-  overflow: hidden; /* Prevent progress bar overflow */
+  background-color: #333;
+  overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  background-color: white; /* White progress */
+  background-color: white;
 }
 
 .play-pause-container {
@@ -98,19 +98,17 @@
 
 
 .header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
   display: flex;
-  margin: 0 auto;
   align-items: center;
-  position: fixed;
-  top: 0;
-  width: 100%;
+  width: 100% !important;
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 1000;
   backdrop-filter: blur(15px);
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .header-image {
@@ -118,7 +116,7 @@
 }
 
 .header-profile-link {
-  padding-left: 12px;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +134,7 @@
   display: flex;
   margin-right: auto;
   top: auto;
-  right: 32px;
+  right: 0;
 }
 
 .login-container {
@@ -342,7 +340,7 @@
   text-align: left;
   margin: 10px;
   max-width: 600px;
-  width: 90vh;
+  width: 90vw;
   position: relative;
 }
 
@@ -519,9 +517,14 @@
 }
 
 .rating-block {
+  top: 4px;
+  right: 4px;
   position: absolute;
-  top: 8px;
-  left: 8px;
+  display: flex !important;
+}
+
+.rating-block-number, .rating-block-image {
+  margin: 2px;
   display: flex;
   align-items: center !important;
   justify-content: center !important;

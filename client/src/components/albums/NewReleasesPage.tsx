@@ -31,13 +31,21 @@ const NewReleasesPage: React.FC<NewReleasesPageProps> = ({ limit }) => {
     }
 
     fetchAlbums()
-  }, [refreshToken, token])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [limit, refreshToken, token])
 
   return (
     <div>
       <div className='album-card-page-container'> 
         {albums.map(album => (
-          <Album key={album.id} id={album.id} link={album.images[0].url} name={album.name} artistName={album.artists[0].name} rating={null}/>
+          <Album 
+            key={album.id} 
+            user_id={null} 
+            id={album.id} 
+            link={album.images[0].url} 
+            name={album.name} 
+            artistName={album.artists[0].name} 
+            rating={null}/>
         ))}
       </div>
     </div>

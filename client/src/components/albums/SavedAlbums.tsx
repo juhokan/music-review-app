@@ -52,6 +52,7 @@ const SavedAlbums: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshToken, token, offset])
 
   return (
@@ -60,6 +61,7 @@ const SavedAlbums: React.FC = () => {
         {albums.map((album) => (
           <Album
             key={album.album.id}
+            user_id={null}
             id={album.album.id}
             link={album.album.images[0].url}
             name={album.album.name}

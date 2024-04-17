@@ -37,6 +37,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
       createAxiosResponseInterceptor(refreshToken, setToken)
     }
     fetchAlbums()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, refreshToken, token])
 
   
@@ -92,6 +93,7 @@ const HomePage: React.FC<NewReleaseProps> = ({ limit }) => {
       <div className='album-card-container'> 
         {albums.map(album => (
           <Album 
+            user_id={null}
             key={album.id} 
             id={album.id} 
             link={album.images[0].url} 

@@ -12,7 +12,6 @@ import pageLinkImage from '../assets/icons/pageLink.svg'
 import AlbumRatingData from '../components/data/AlbumRatingData'
 
 
-
 const UserPage: React.FC = () => {
   const { auth } = React.useContext(UserContext)
   const [id, setId] = React.useState<number>()
@@ -117,6 +116,7 @@ const UserPage: React.FC = () => {
             filteredAlbums.slice(0, 10).map((album) => (
               <Album 
                 key={album.id} 
+                user_id={null}
                 id={album.attributes.album_id} 
                 link={album.attributes.image_link} 
                 name={album.attributes.title} 
@@ -126,7 +126,8 @@ const UserPage: React.FC = () => {
             ))
           ) : (
             filteredAlbums.map((album) => (
-              <Album 
+              <Album
+                user_id={null}
                 key={album.id} 
                 id={album.attributes.album_id} 
                 link={album.attributes.image_link} 
@@ -153,6 +154,7 @@ const UserPage: React.FC = () => {
             favouriteAlbums.slice(0, 10).map((album) => (
               <Album 
                 key={album.id} 
+                user_id={null}
                 id={album.attributes.album_id} 
                 link={album.attributes.image_link} 
                 name={album.attributes.title} 
@@ -164,6 +166,7 @@ const UserPage: React.FC = () => {
             favouriteAlbums.map((album) => (
               <Album 
                 key={album.id} 
+                user_id={null}
                 id={album.attributes.album_id} 
                 link={album.attributes.image_link} 
                 name={album.attributes.title} 
@@ -190,6 +193,7 @@ const UserPage: React.FC = () => {
               {albums.map((album) => (
                 <Album 
                   key={album.album.id} 
+                  user_id={null}
                   id={album.album.id} 
                   link={album.album.images[0].url} 
                   name={album.album.name} 
